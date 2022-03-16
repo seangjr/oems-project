@@ -6,7 +6,8 @@ Project is done by me and @gingerojz
 ```
 $PROJECT_ROOT
 │   # Main files
-├── data # text file directory
-    ├── login
+├── data 
+│    # text file directory
+
 
 ```
