@@ -1,4 +1,3 @@
-# login / signup functionality
 import os
 import time
 # constants
