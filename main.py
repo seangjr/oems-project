@@ -3,7 +3,7 @@ import os
 import time
 # constants
 working_path = os.getcwd()
-text_file = working_path + "data/users.txt"
+text_file = working_path + "/data/users.txt"
 
 def permission():
     try:
