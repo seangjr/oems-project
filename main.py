@@ -1,5 +1,6 @@
 import os
 import time
+
 # constants
 working_path = os.getcwd()
 text_file = working_path + "/data/users.txt"
@@ -36,9 +37,14 @@ def sign_up():
                 return
     # admin permission
     user_permission = permission()
-    # write to file
+    """
+    Write username, password, date registered, and admin permission to text file.
+    """
+    # date registered for user
+    date_registered = time.strftime("%d/%m/%Y")
+    # write to text file
     with open(text_file, "a") as file:
-        file.write(f"{username} {password} {user_permission}\n")
+        file.write(f"{username} {password} {user_permission} {date_registered}\n")
     print("Account created.")
     time.sleep(1)
 
@@ -74,7 +80,7 @@ def user_menu():
     print("User menu.")
 
 def main():
-    print("Welcome to the cool-stuff app.")
+    print("Welcome to Asian Event Management Services! Select options below: ")
     print("1. Sign up.")
     print("2. Log in.")
     print("3. Exit.")
