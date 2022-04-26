@@ -8,6 +8,4 @@ $PROJECT_ROOT
 │   # Main files
 ├── data 
 │    # text file directory
-
-
 ```
