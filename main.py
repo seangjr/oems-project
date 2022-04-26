@@ -1,7 +1,9 @@
 # login / signup functionality
+import os
 import time
 # constants
-text_file = "/data/users.txt"
+working_path = os.getcwd()
+text_file = working_path + "data/users.txt"
 
 def permission():
     try:
