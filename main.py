@@ -1,7 +1,7 @@
 # login / signup functionality
 import time
 # constants
-text_file = "/home/sean/Programming/python-projects/cool-stuff/users.txt"
+text_file = "/data/users.txt"
 
 def permission():
     try:
