@@ -5,6 +5,7 @@ import time
 working_path = os.getcwd()
 text_file = working_path + "/data/users.txt"
 
+
 def permission():
     try:
         permission_prompt = str(input("Are you an admin? (y/n): "))
@@ -17,7 +18,8 @@ def permission():
         time.sleep(1)
 
         permission()
-        
+
+
 def sign_up():
     print("Sign up for an account.")
     username = str(input("Username: "))
@@ -44,9 +46,11 @@ def sign_up():
     date_registered = time.strftime("%d/%m/%Y")
     # write to text file
     with open(text_file, "a") as file:
-        file.write(f"{username} {password} {user_permission} {date_registered}\n")
+        file.write(
+            f"{username} {password} {user_permission} {date_registered}\n")
     print("Account created.")
     time.sleep(1)
+
 
 def log_in():
     print("Log in to your account.")
@@ -70,14 +74,17 @@ def log_in():
     print("Invalid username or password.")
     time.sleep(1)
 
+
 def admin():
     # if users see this means they are logged in as admin
     print("Admin.")
     time.sleep(1)
 
+
 def user_menu():
     # user menu
     print("User menu.")
+
 
 def main():
     print("Welcome to Asian Event Management Services! Select options below: ")
@@ -101,4 +108,43 @@ def main():
     main()
     return 0
 
+
 main()
+
+"""
+Registered customer functions
+"""
+
+
+def customer():
+    print("Welcome! Select options below: ")
+    print("1. Event Details ")
+    print("2. Checkout ")
+    print("3. Exit ")
+    try:
+        options = int(input("Choice: "))
+        if options == 1:
+            eventcategory()
+        elif options == 2:
+            events()
+        elif options == 3:
+            checkout()
+        elif options == 4:
+            print("Exiting...")
+            time.sleep(1)
+            exit()
+    except ValueError:
+        print("Invalid choice.")
+        time.sleep(1)
+        customer()
+    customer()
+
+
+"""
+Event Category
+"""
+
+
+def eventcategory():
+    print("Event Category: ")
+    print("1. ")
