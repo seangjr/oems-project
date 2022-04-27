@@ -170,5 +170,39 @@ def main():
     main()
     return 0
 
+"""
+Registered customer functions
+"""
+def customer():
+    print("Welcome! Select options below: ")
+    print("1. Event Details ")
+    print("2. Checkout ")
+    print("3. Exit ")
+    try:
+        options = int(input("Choice: "))
+        if options == 1:
+            eventcategory()
+        elif options == 2:
+            events()
+        elif options == 3:
+            checkout()
+        elif options == 4:
+            print("Exiting...")
+            time.sleep(1)
+            exit()
+    except ValueError:
+        print("Invalid choice.")
+        time.sleep(1)
+        customer()
+    customer()
+
+
+"""
+Event Category
+"""
+def eventcategory():
+    print("Event Category: ")
+    print("1. ")
+
 if __name__ == "__main__":
     main()
