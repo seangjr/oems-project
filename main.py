@@ -6,6 +6,8 @@ import authentication, admin_func
 working_path = os.getcwd()
 users_file = working_path + "/data/users.txt"
 events_file = working_path + "/data/events.txt"
+# categories for events
+categories = ['Weddings', 'Concerts', 'Talent Shows', 'Seminars', 'Brand Activation']
 
 # clear screen function 
 def clear_screen():

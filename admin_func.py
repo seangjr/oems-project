@@ -1,8 +1,8 @@
 import time
 import os
+import main
 
-# categories for events
-categories = ['Weddings', 'Concerts', 'Talent Shows', 'Seminars', 'Brand Activation']
+categories = main.categories
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
