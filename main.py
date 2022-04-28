@@ -1,6 +1,7 @@
 import os
 import time
 from authentication import log_in, sign_up
+
 # constants
 working_path = os.getcwd()
 users_file = working_path + "/data/users.txt"

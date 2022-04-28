@@ -31,23 +31,19 @@ def add_event(events_file: str):
     print("Available categories: ")
     for element in categories:
         print(f"{categories.index(element) + 1}. {element}")
-    try:
-        event_category = event_prompt(int(input("Event Category: ")))
-        if event_category == False:
-            print("Invalid choice.")
-            event_category = event_prompt(int(input("Event Category: ")))
-        
-        event_name = event_prompt(input("Event name: "))
-        event_date = event_prompt(input("Event date: "))
-        event_time = event_prompt(input("Event time: "))
-        event_venue = event_prompt(input("Event venue: "))
-        event_price = event_prompt(input("Event price: "))
-        event_capacity = event_prompt(input("Event capacity: "))
-        event_description = event_prompt(input("Event description: "))
 
-    except ValueError:
-        print("Invalid input. Try again!")
-        add_event(events_file)
+    event_category = event_prompt(int(input("Event Category: ")))
+    if event_category == False:
+        print("Invalid choice.")
+        event_category = event_prompt(int(input("Event Category: ")))
+    
+    event_name = event_prompt(input("Event name: "))
+    event_date = event_prompt(input("Event date: "))
+    event_time = event_prompt(input("Event time: "))
+    event_venue = event_prompt(input("Event venue: "))
+    event_price = event_prompt(input("Event price: "))
+    event_capacity = event_prompt(input("Event capacity: "))
+    event_description = event_prompt(input("Event description: "))
 
     with open(events_file, "a") as file:
         line_count = 0
