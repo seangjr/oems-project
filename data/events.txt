@@ -1,2 +1,0 @@
-category eventname eventdesc eventprice eventdate
-Weddings Concerts TalentShow Seminar BrandActivation 

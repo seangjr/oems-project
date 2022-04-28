@@ -5,7 +5,9 @@ Project is done by me and @gingerojz
 ## Project Structure
 ```
 $PROJECT_ROOT
-│   # Main files
+│   main.py
+│   .pseudo
 ├── data 
-│    # text file directory
+│       users.txt
+│       events.txt
 ```
