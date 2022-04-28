@@ -1,6 +1,8 @@
 import time
 import os
 
+from admin_func import admin
+
 # clear screen function 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -47,7 +49,7 @@ def sign_up(dir: str):
     time.sleep(1)
     clear_screen()
 
-def log_in(dir: str, admin_func, user_func):
+def log_in(dir: str, events_file: str):
     print("Log in to your account.")
     username = str(input("Username: "))
     password = str(input("Password: "))
@@ -61,9 +63,9 @@ def log_in(dir: str, admin_func, user_func):
                 print("Logged in.")
                 # call auth function
                 if line.split()[2] == "True":
-                    admin_func()
+                    admin(events_file)
                 else:
-                    user_func()
+                    print("User")
                 time.sleep(1)
                 return
     print("Invalid username or password.")
