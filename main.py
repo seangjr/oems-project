@@ -74,11 +74,27 @@ def admin():
             file.write(f"{event_number} {event_category} {event_name} {event_date} {event_time} {event_venue} {event_price} {event_capacity}\n")
         print("Event added.")
         time.sleep(1)
+        # recursive call 
+        admin()
+        
 
     def modify_event():
         clear_screen()
         print("Modify event...")
 
+    def display_event():
+        clear_screen()
+        print("Displaying all events...")
+        with open(events_file, 'r') as file:
+            for line in file:
+                print(line)
+
+        choice = input("Type 'e' to exit when ready: ")
+        if choice.lower() != "e":
+            print("Invalid input!")
+            display_event()
+        admin() 
+        
     clear_screen()
     print("Hi admin! Select options below: ")
     print("1. Create event.")
@@ -93,8 +109,7 @@ def admin():
         elif choice == 2:
             modify_event()
         elif choice == 3:
-            print("3")
-            # display_events()
+            display_event()
         elif choice == 4:
             print("4")
             # search_customer()
