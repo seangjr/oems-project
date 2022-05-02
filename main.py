@@ -26,18 +26,9 @@ def permission():
         clear_screen()
         permission()
 
-"""
-Admin function
-
-Contains:
-    Event prompt
-    Add event
-    Modify Event
-
-"""
-
 def event_prompt(choice):
     # for event name, date, time, price, capacity and desc
+    # if not type int returns input
     if not isinstance(choice, int):
         return choice
 
@@ -52,6 +43,7 @@ def event_prompt(choice):
         return categories[3] 
     elif choice == 5:
         return categories[4]
+
 def add_event():
     clear_screen()
     print("Add event.")
@@ -79,18 +71,18 @@ def add_event():
         file.write(f"{line_count + 1} {event_category} {event_name} {event_date} {event_time} {event_venue} {event_price} {event_capacity} {event_description}\n")
     print("Event added.")
     time.sleep(1)
+
 def modify_event():
     clear_screen()
     print("Modify event...")
-def admin():
 
+def admin():
     print("Hi admin! Select options below: ")
     print("1. Create event.")
     print("2. Modify event record.")
     print("3. Display all records.")
     print("4. Search record of customer details.")
     print("5. Log out")
-
     try:
         choice = int(input("Choice: "))
         if choice == 1:
@@ -113,10 +105,6 @@ def admin():
         clear_screen()
         admin()
     main()
-
-"""
-Registered customer functions
-"""
 
 def customer():
     print("Welcome! Select options below: ")
@@ -155,10 +143,6 @@ def customer():
         customer()
     customer()
 
-"""
-User sign up function.
-"""
-
 def sign_up():
     print("Sign up for an account.")
     username = str(input("Username: "))
@@ -178,9 +162,6 @@ def sign_up():
                 return
     # admin permission
     user_permission = permission()
-    """
-    Write username, password, date registered, and admin permission to text file.
-    """
     # date registered for user
     date_registered = time.strftime("%d/%m/%Y")
     # write to text file
@@ -189,10 +170,6 @@ def sign_up():
     print("Account created.")
     time.sleep(1)
     clear_screen()
-
-"""
-User login function
-"""
 
 def log_in():
     print("Log in to your account.")
@@ -217,15 +194,9 @@ def log_in():
     time.sleep(1)
     clear_screen()
 
-
-"""
-Unregistered user function
-"""
-
 def user_menu():
     # user menu
     print("User menu.")
-
 
 # main function
 def main():
