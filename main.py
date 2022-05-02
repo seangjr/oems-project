@@ -44,39 +44,42 @@ def event_prompt(choice):
     elif choice == 5:
         return categories[4]
 
-def add_event():
-    clear_screen()
-    print("Add event.")
-    print("Available categories: ")
-    for element in categories:
-        print(f"{categories.index(element) + 1}. {element}")
-    try:
-        event_category = event_prompt(int(input("Event Category: ")))
-        event_name = event_prompt(input("Event name: "))
-        event_date = event_prompt(input("Event date: "))
-        event_time = event_prompt(input("Event time: "))
-        event_venue = event_prompt(input("Event venue: "))
-        event_price = event_prompt(input("Event price: "))
-        event_capacity = event_prompt(input("Event capacity: "))
-        event_description = event_prompt(input("Event description: "))
-    except ValueError:
-        print("Invalid input. Try again!")
-        add_event()
-
-    with open(events_file, "a") as file:
-        line_count = 0
-        for line in file:
-            if line != "\n":
-                line_count += 1
-        file.write(f"{line_count + 1} {event_category} {event_name} {event_date} {event_time} {event_venue} {event_price} {event_capacity} {event_description}\n")
-    print("Event added.")
-    time.sleep(1)
-
-def modify_event():
-    clear_screen()
-    print("Modify event...")
 
 def admin():
+
+    def add_event():
+        clear_screen()
+        print("Add event.")
+        print("Available categories: ")
+        for element in categories:
+            print(f"{categories.index(element) + 1}. {element}")
+        try:
+            # event number
+            with open(events_file, 'r') as file:
+                event_number = 1
+                for line in file.readlines():
+                    event_number += line.count('\n')
+            event_category = event_prompt(int(input("Event Category: ")))
+            event_name = event_prompt(input("Event name: "))
+            event_date = event_prompt(input("Event date (dd-mm-yy): "))
+            event_time = event_prompt(input("Event time (24 hour format): "))
+            event_venue = event_prompt(input("Event venue: "))
+            event_price = event_prompt(input("Event price (RM): "))
+            event_capacity = event_prompt(input("Event capacity: "))
+        except ValueError:
+            print("Invalid input. Try again!")
+            add_event()
+        # write to text file
+        with open(events_file, "a") as file:
+            file.write(f"{event_number} {event_category} {event_name} {event_date} {event_time} {event_venue} {event_price} {event_capacity}\n")
+        print("Event added.")
+        time.sleep(1)
+
+    def modify_event():
+        clear_screen()
+        print("Modify event...")
+
+    clear_screen()
     print("Hi admin! Select options below: ")
     print("1. Create event.")
     print("2. Modify event record.")
@@ -222,7 +225,6 @@ def main():
         main()
     main()
     return 0
-
 
 if __name__ == "__main__":
     main()
