@@ -30,7 +30,7 @@ def event_prompt(choice):
     # for event name, date, time, price, capacity and desc
     # if not type int returns input
     if not isinstance(choice, int):
-        return choice
+        return choice.replace(" ", "_")
 
     # if choice is an integer, then return the corresponding event
     if choice == 1:
@@ -54,17 +54,24 @@ def admin():
         for element in categories:
             print(f"{categories.index(element) + 1}. {element}")
         try:
-            # event number
+            # event number [0]
             with open(events_file, 'r') as file:
                 event_number = 1
                 for line in file.readlines():
                     event_number += line.count('\n')
+            # index [1]
             event_category = event_prompt(int(input("Event Category: ")))
+            # event name [2]
             event_name = event_prompt(input("Event name: "))
+            # event date [3]
             event_date = event_prompt(input("Event date (dd-mm-yy): "))
+            # event time [4]
             event_time = event_prompt(input("Event time (24 hour format): "))
+            # event venue [5]
             event_venue = event_prompt(input("Event venue: "))
+            # event price [6]
             event_price = event_prompt(input("Event price (RM): "))
+            # event capacity [7]
             event_capacity = event_prompt(input("Event capacity: "))
         except ValueError:
             print("Invalid input. Try again!")
@@ -81,19 +88,31 @@ def admin():
     def modify_event():
         clear_screen()
         print("Modify event...")
+        
 
     def display_event():
         clear_screen()
         print("Displaying all events...")
         with open(events_file, 'r') as file:
             for line in file:
-                print(line)
+                event_details = line.split()
+                event_index = event_details[0]
+                event_category = event_details[1]
+                event_name = event_details[2]
+                event_date = event_details[3]
+                event_time = event_details[4]
+                event_venue = event_details[5]
+                event_price = event_details[6]
+                event_capacity = event_details[7]
+                print(f"{event_index} Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
 
         choice = input("Type 'e' to exit when ready: ")
         if choice.lower() != "e":
             print("Invalid input!")
+            time.sleep(2)
             display_event()
-        admin() 
+        else:
+            admin()
         
     clear_screen()
     print("Hi admin! Select options below: ")
