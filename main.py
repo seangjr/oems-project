@@ -5,6 +5,7 @@ import time
 working_path = os.getcwd()
 users_file = working_path + "/data/users.txt"
 events_file = working_path + "/data/events.txt"
+uname = ""
 # categories for events
 categories = ['Weddings', 'Concerts', 'Talent Shows', 'Seminars', 'Brand Activation']
 
@@ -45,7 +46,7 @@ def event_prompt(choice):
         return categories[4]
 
 
-def admin():
+def admin(username):
 
     def add_event():
         clear_screen()
@@ -88,7 +89,7 @@ def admin():
     def modify_event():
         clear_screen()
         print("Modify event...")
-        
+
 
     def display_event():
         clear_screen()
@@ -112,10 +113,10 @@ def admin():
             time.sleep(2)
             display_event()
         else:
-            admin()
+            admin(username)
         
     clear_screen()
-    print("Hi admin! Select options below: ")
+    print(f"Hi {username}! Select options below: ")
     print("1. Create event.")
     print("2. Modify event record.")
     print("3. Display all records.")
@@ -222,11 +223,12 @@ def log_in():
                 print("Logged in.")
                 # call auth function
                 if line.split()[2] == "True":
-                    admin()
+                    admin(username)
                 else:
-                    user_menu()
+                    customer()
                 time.sleep(1)
                 return
+
     print("Invalid username or password.")
     time.sleep(1)
     clear_screen()
