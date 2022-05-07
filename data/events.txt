@@ -1,1 +1,2 @@
-1 Weddings Keshi_Wedding 03-04-22 1700 Lucky_Plaza 200 200
+1 Talent_Shows sdf 03-03-22 1900 LP 20 200
+2 Seminars sdf 03-04-22 1900 NP 20 300

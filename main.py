@@ -7,7 +7,8 @@ users_file = working_path + "/data/users.txt"
 events_file = working_path + "/data/events.txt"
 uname = ""
 # categories for events
-categories = ['Weddings', 'Concerts', 'Talent Shows', 'Seminars', 'Brand Activation']
+categories = ['Weddings', 'Concerts', 'Talent_Shows', 'Seminars', 'Brand_Activation']
+
 
 # clear screen function 
 def clear_screen():
@@ -48,12 +49,15 @@ def event_prompt(choice):
 
 def admin(username):
 
+    def display_categories():
+        print("Event Categories: ")
+        for element in categories:
+            print(f"{categories.index(element) + 1}. {element.replace('_', ' ')}")
+
     def add_event():
         clear_screen()
         print("Add event.")
-        print("Available categories: ")
-        for element in categories:
-            print(f"{categories.index(element) + 1}. {element}")
+        display_categories()
         try:
             # event number [0]
             with open(events_file, 'r') as file:
@@ -83,17 +87,9 @@ def admin(username):
         print("Event added.")
         time.sleep(1)
         # recursive call 
-        admin()
-        
+        admin(username)
 
-    def modify_event():
-        clear_screen()
-        print("Modify event...")
-
-
-    def display_event():
-        clear_screen()
-        print("Displaying all events...")
+    def event_list():
         with open(events_file, 'r') as file:
             for line in file:
                 event_details = line.split()
@@ -106,7 +102,58 @@ def admin(username):
                 event_price = event_details[6]
                 event_capacity = event_details[7]
                 print(f"{event_index} Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
+        
 
+    def modify_event():
+        clear_screen()
+        print("List of events: ")
+        event_list()
+        print("Modify event. Please enter the event number to modify: ")
+        event_to_modify = int(input("Event number: "))
+        with open(events_file, 'r') as file:
+            filedata = file.readlines()
+
+        for line in filedata:
+            temp_line = line
+            if line[:1] == str(event_to_modify):
+                event_details = line.split()
+                event_index = event_details[0]
+                event_category = event_details[1]
+                event_name = event_details[2]
+                event_date = event_details[3]
+                event_time = event_details[4]
+                event_venue = event_details[5]
+                event_price = event_details[6]
+                event_capacity = event_details[7]
+                print(f"{event_index} Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
+                print("Please enter the field you want to modify: \n1. Category\n2. Name\n3. Date\n4. Time\n5. Venue\n6. Price\n7. Capacity")
+                choice = int(input("Choice: "))
+                if choice == 1:
+                    display_categories()
+                    # add error callback
+                    line = line.replace(event_category, event_prompt(int(input("New category: "))))
+                elif choice == 2:
+                    line = line.replace(event_name, event_prompt(input("New name: ")))
+                elif choice == 3:
+                    line = line.replace(event_date, event_prompt(input("New date: ")))
+                elif choice == 4:
+                    line = line.replace(event_time, event_prompt(input("New time: ")))
+                elif choice == 5:
+                    line = line.replace(event_venue, event_prompt(input("New venue: ")))
+                elif choice == 6:
+                    line = line.replace(event_price, event_prompt(input("New price: ")))
+                elif choice == 7:
+                    line = line.replace(event_capacity, event_prompt(input("New capacity: ")))
+
+                filedata = [item.replace(temp_line, line) for item in filedata]
+
+        with open(events_file, 'w') as file:
+            file.writelines(filedata)
+
+    def display_event():
+        clear_screen()
+        print("Displaying all events...")
+        event_list()
         choice = input("Type 'e' to exit when ready: ")
         if choice.lower() != "e":
             print("Invalid input!")
@@ -141,7 +188,7 @@ def admin(username):
         print("Error! Invalid value. Try again!")
         time.sleep(1)
         clear_screen()
-        admin()
+        admin(username)
     main()
 
 def customer():
