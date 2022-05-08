@@ -7,10 +7,14 @@ users_file = working_path + "/data/users.txt"
 events_file = working_path + "/data/events.txt"
 
 # categories for events
-categories = ['Weddings', 'Concerts', 'Talent_Shows', 'Seminars', 'Brand_Activation']
-# clear screen function 
+categories = ['Weddings', 'Concerts',
+              'Talent_Shows', 'Seminars', 'Brand_Activation']
+# clear screen function
+
+
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
+
 
 def event_prompt(choice):
     # for event name, date, time, price, capacity and desc
@@ -26,7 +30,7 @@ def event_prompt(choice):
     elif choice == 3:
         return categories[2]
     elif choice == 4:
-        return categories[3] 
+        return categories[3]
     elif choice == 5:
         return categories[4]
 
@@ -35,6 +39,7 @@ def display_categories():
     print("Event Categories: ")
     for element in categories:
         print(f"{categories.index(element) + 1}. {element.replace('_', ' ')}")
+
 
 def event_list():
     display_categories()
@@ -53,6 +58,7 @@ def event_list():
             # display event details in category
             if event_category == category:
                 print(f"{event_index} Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
+
 
 def admin(username):
 
@@ -85,10 +91,11 @@ def admin(username):
             add_event()
         # write to text file
         with open(events_file, "a") as file:
-            file.write(f"{event_number} {event_category} {event_name} {event_date} {event_time} {event_venue} {event_price} {event_capacity}\n")
+            file.write(
+                f"{event_number} {event_category} {event_name} {event_date} {event_time} {event_venue} {event_price} {event_capacity}\n")
         print("Event added.")
         time.sleep(1)
-        # recursive call 
+        # recursive call
         admin(username)
 
     def modify_event():
@@ -117,25 +124,32 @@ def admin(username):
                 choice = int(input("Choice: "))
                 if choice == 1:
                     display_categories()
-                    line = line.replace(event_category, event_prompt(int(input("New category: "))))
+                    line = line.replace(event_category, event_prompt(
+                        int(input("New category: "))))
                 elif choice == 2:
-                    line = line.replace(event_name, event_prompt(input("New name: ")))
+                    line = line.replace(
+                        event_name, event_prompt(input("New name: ")))
                 elif choice == 3:
-                    line = line.replace(event_date, event_prompt(input("New date: ")))
+                    line = line.replace(
+                        event_date, event_prompt(input("New date: ")))
                 elif choice == 4:
-                    line = line.replace(event_time, event_prompt(input("New time: ")))
+                    line = line.replace(
+                        event_time, event_prompt(input("New time: ")))
                 elif choice == 5:
-                    line = line.replace(event_venue, event_prompt(input("New venue: ")))
+                    line = line.replace(
+                        event_venue, event_prompt(input("New venue: ")))
                 elif choice == 6:
-                    line = line.replace(event_price, event_prompt(input("New price: ")))
+                    line = line.replace(
+                        event_price, event_prompt(input("New price: ")))
                 elif choice == 7:
-                    line = line.replace(event_capacity, event_prompt(input("New capacity: ")))
+                    line = line.replace(
+                        event_capacity, event_prompt(input("New capacity: ")))
 
                 filedata = [item.replace(temp_line, line) for item in filedata]
 
         with open(events_file, 'w') as file:
             file.writelines(filedata)
-        
+
         admin(username)
 
     def display_event():
@@ -149,7 +163,7 @@ def admin(username):
             display_event()
         else:
             admin(username)
-    
+
     def customer_details():
 
         def display_customer_registration():
@@ -161,8 +175,9 @@ def admin(username):
                     permission = user_details[2]
                     registration_date = user_details[3]
                     if permission != "True":
-                        print(f"Username: {user}, Registration Date: {registration_date}")
-            
+                        print(
+                            f"Username: {user}, Registration Date: {registration_date}")
+
             choice = input("Type 'e' to exit when ready: ")
             if choice.lower() != "e":
                 print("Invalid input!")
@@ -170,20 +185,22 @@ def admin(username):
                 display_event()
             else:
                 admin(username)
-        
+
         def search_customer_registration():
             clear_screen()
             print("Search customer registration.")
             search_username = str(input("Search username: "))
             with open(users_file, 'r') as file:
-                print(f"Searching usernames starting with '{search_username}'...")
+                print(
+                    f"Searching usernames starting with '{search_username}'...")
                 for line in file:
                     user_details = line.split()
                     user = user_details[0]
                     permission = user_details[2]
                     registration_date = user_details[3]
                     if permission != "True":
-                        print(f"Username: {user}\nRegistration Date: {registration_date}") if user.startswith(search_username) else print("No results.")
+                        print(f"Username: {user}\nRegistration Date: {registration_date}") if user.startswith(
+                            search_username) else print("No results.")
 
             choice = input("Type 'e' to exit when ready: ")
             if choice.lower() != "e":
@@ -235,6 +252,7 @@ def admin(username):
         admin(username)
     main()
 
+
 def customer():
     print("Welcome! Select options below: ")
     print("1. Event Details ")
@@ -244,11 +262,11 @@ def customer():
     def eventcategory():
         print("Event Category: ")
         print("1. ")
-    
+
     def events():
         print("Events: ")
         print("1. ")
-    
+
     def checkout():
         print("Checkout: ")
         print("1. ")
@@ -260,8 +278,6 @@ def customer():
         elif options == 2:
             checkout()
         elif options == 3:
-            checkout()
-        elif options == 4:
             print("Exiting...")
             time.sleep(1)
             clear_screen()
@@ -271,6 +287,7 @@ def customer():
         time.sleep(1)
         customer()
     customer()
+
 
 def sign_up():
     print("Sign up for an account.")
@@ -295,10 +312,12 @@ def sign_up():
     date_registered = time.strftime("%d/%m/%Y")
     # write to text file
     with open(users_file, "a") as file:
-        file.write(f"{username} {password} {user_permission} {date_registered}\n")
+        file.write(
+            f"{username} {password} {user_permission} {date_registered}\n")
     print("Account created.")
     time.sleep(1)
     clear_screen()
+
 
 def log_in():
     print("Log in to your account.")
@@ -324,11 +343,14 @@ def log_in():
     time.sleep(1)
     clear_screen()
 
+
 def user_menu():
     # user menu
     print("User menu.")
 
 # main function
+
+
 def main():
     print("Welcome to Asian Event Management Services! Select options below: ")
     print("1. Sign up.")
@@ -352,6 +374,7 @@ def main():
         main()
     main()
     return 0
+
 
 if __name__ == "__main__":
     main()
