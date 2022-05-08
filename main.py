@@ -30,7 +30,6 @@ def event_prompt(choice):
     elif choice == 5:
         return categories[4]
 
-
 def display_categories():
     print("Event Categories: ")
     for element in categories:
