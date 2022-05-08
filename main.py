@@ -5,26 +5,12 @@ import time
 working_path = os.getcwd()
 users_file = working_path + "/data/users.txt"
 events_file = working_path + "/data/events.txt"
-uname = ""
+
 # categories for events
 categories = ['Weddings', 'Concerts', 'Talent_Shows', 'Seminars', 'Brand_Activation']
 # clear screen function 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
-
-# user permission function to be called in sign up function 
-def permission():
-    try:
-        permission_prompt = str(input("Are you an admin? (y/n): "))
-        if permission_prompt == "y" or permission_prompt == "Y":
-            return True
-        elif permission_prompt == "n" or permission_prompt == "N":
-            return False
-    except ValueError:
-        print("Invalid choice.")
-        time.sleep(1)
-        clear_screen()
-        permission()
 
 def event_prompt(choice):
     # for event name, date, time, price, capacity and desc
@@ -131,7 +117,6 @@ def admin(username):
                 choice = int(input("Choice: "))
                 if choice == 1:
                     display_categories()
-                    # add error callback
                     line = line.replace(event_category, event_prompt(int(input("New category: "))))
                 elif choice == 2:
                     line = line.replace(event_name, event_prompt(input("New name: ")))
@@ -168,6 +153,7 @@ def admin(username):
     def customer_details():
 
         def display_customer_registration():
+            clear_screen()
             with open(users_file, 'r') as file:
                 for line in file:
                     user_details = line.split()
@@ -184,12 +170,40 @@ def admin(username):
                 display_event()
             else:
                 admin(username)
+        
+        def search_customer_registration():
+            clear_screen()
+            print("Search customer registration.")
+            search_username = str(input("Search username: "))
+            with open(users_file, 'r') as file:
+                print(f"Searching usernames starting with '{search_username}'...")
+                for line in file:
+                    user_details = line.split()
+                    user = user_details[0]
+                    permission = user_details[2]
+                    registration_date = user_details[3]
+                    if permission != "True":
+                        print(f"Username: {user}\nRegistration Date: {registration_date}") if user.startswith(search_username) else print("No results.")
+
+            choice = input("Type 'e' to exit when ready: ")
+            if choice.lower() != "e":
+                print("Invalid input!")
+                time.sleep(2)
+                search_customer_registration()
+            else:
+                admin(username)
 
         clear_screen()
         print("Customer details! Select an option below: \n1. Display customer registration\n2. Display customer payment\n3. Search customer registration\n4. Search customer payment\n5. Back")
         choice = int(input("Choice: "))
         if choice == 1:
-            display_customer_registration() 
+            display_customer_registration()
+        elif choice == 2:
+            print("2")
+        elif choice == 3:
+            search_customer_registration()
+        elif choice == 4:
+            print("4")
         elif choice == 5:
             admin(username)
 
@@ -198,8 +212,8 @@ def admin(username):
     print("1. Create event.")
     print("2. Modify event record.")
     print("3. Display all records.")
-    print("4. Customer details")
-    print("5. Log out")
+    print("4. More options for customer details.")
+    print("5. Log out.")
     try:
         choice = int(input("Choice: "))
         if choice == 1:
@@ -275,8 +289,8 @@ def sign_up():
                 print("Username taken.")
                 time.sleep(1)
                 return
-    # admin permission
-    user_permission = permission()
+    # create user file
+    user_permission = False
     # date registered for user
     date_registered = time.strftime("%d/%m/%Y")
     # write to text file
