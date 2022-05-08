@@ -1,3 +1,4 @@
 sean abc True 28/04/2022
 user1 user1 False 08/05/2022
 user2 user2 False 08/05/2022
+customer customer False 08/05/2022
