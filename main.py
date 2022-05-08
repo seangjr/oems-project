@@ -102,7 +102,6 @@ def admin(username):
                 event_price = event_details[6]
                 event_capacity = event_details[7]
                 print(f"{event_index} Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
-        
 
     def modify_event():
         clear_screen()
