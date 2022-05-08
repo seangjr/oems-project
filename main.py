@@ -8,8 +8,6 @@ events_file = working_path + "/data/events.txt"
 uname = ""
 # categories for events
 categories = ['Weddings', 'Concerts', 'Talent_Shows', 'Seminars', 'Brand_Activation']
-
-
 # clear screen function 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -47,12 +45,30 @@ def event_prompt(choice):
         return categories[4]
 
 
-def admin(username):
+def display_categories():
+    print("Event Categories: ")
+    for element in categories:
+        print(f"{categories.index(element) + 1}. {element.replace('_', ' ')}")
 
-    def display_categories():
-        print("Event Categories: ")
-        for element in categories:
-            print(f"{categories.index(element) + 1}. {element.replace('_', ' ')}")
+def event_list():
+    display_categories()
+    category = event_prompt(int(input("Event Category: ")))
+    with open(events_file, 'r') as file:
+        for line in file:
+            event_details = line.split()
+            event_index = event_details[0]
+            event_category = event_details[1]
+            event_name = event_details[2]
+            event_date = event_details[3]
+            event_time = event_details[4]
+            event_venue = event_details[5]
+            event_price = event_details[6]
+            event_capacity = event_details[7]
+            # display event details in category
+            if event_category == category:
+                print(f"{event_index} Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
+
+def admin(username):
 
     def add_event():
         clear_screen()
@@ -89,23 +105,9 @@ def admin(username):
         # recursive call 
         admin(username)
 
-    def event_list():
-        with open(events_file, 'r') as file:
-            for line in file:
-                event_details = line.split()
-                event_index = event_details[0]
-                event_category = event_details[1]
-                event_name = event_details[2]
-                event_date = event_details[3]
-                event_time = event_details[4]
-                event_venue = event_details[5]
-                event_price = event_details[6]
-                event_capacity = event_details[7]
-                print(f"{event_index} Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
-
     def modify_event():
         clear_screen()
-        print("List of events: ")
+        print("List of events... choose a category to display an event!")
         event_list()
         print("Modify event. Please enter the event number to modify: ")
         event_to_modify = int(input("Event number: "))
@@ -148,10 +150,12 @@ def admin(username):
 
         with open(events_file, 'w') as file:
             file.writelines(filedata)
+        
+        admin(username)
 
     def display_event():
         clear_screen()
-        print("Displaying all events...")
+        print(f"Displaying all events...")
         event_list()
         choice = input("Type 'e' to exit when ready: ")
         if choice.lower() != "e":
@@ -160,13 +164,41 @@ def admin(username):
             display_event()
         else:
             admin(username)
-        
+    
+    def customer_details():
+
+        def display_customer_registration():
+            with open(users_file, 'r') as file:
+                for line in file:
+                    user_details = line.split()
+                    user = user_details[0]
+                    permission = user_details[2]
+                    registration_date = user_details[3]
+                    if permission != "True":
+                        print(f"Username: {user}, Registration Date: {registration_date}")
+            
+            choice = input("Type 'e' to exit when ready: ")
+            if choice.lower() != "e":
+                print("Invalid input!")
+                time.sleep(2)
+                display_event()
+            else:
+                admin(username)
+
+        clear_screen()
+        print("Customer details! Select an option below: \n1. Display customer registration\n2. Display customer payment\n3. Search customer registration\n4. Search customer payment\n5. Back")
+        choice = int(input("Choice: "))
+        if choice == 1:
+            display_customer_registration() 
+        elif choice == 5:
+            admin(username)
+
     clear_screen()
     print(f"Hi {username}! Select options below: ")
     print("1. Create event.")
     print("2. Modify event record.")
     print("3. Display all records.")
-    print("4. Search record of customer details.")
+    print("4. Customer details")
     print("5. Log out")
     try:
         choice = int(input("Choice: "))
@@ -177,8 +209,7 @@ def admin(username):
         elif choice == 3:
             display_event()
         elif choice == 4:
-            print("4")
-            # search_customer()
+            customer_details()
         elif choice == 5:
             print("Logging out...")
             clear_screen()
