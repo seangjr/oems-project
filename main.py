@@ -59,7 +59,6 @@ def admin(username):
         print("Add event.")
         display_categories()
         try:
-            
             # event number [0]
             with open(events_file, 'r') as file:
                 event_number = 1
