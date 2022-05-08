@@ -258,7 +258,7 @@ def customer():
         if options == 1:
             eventcategory()
         elif options == 2:
-            events()
+            checkout()
         elif options == 3:
             checkout()
         elif options == 4:
