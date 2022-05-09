@@ -9,6 +9,7 @@ events_file = working_path + "/data/events.txt"
 # categories for events
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
+
 # clear screen function
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -253,6 +254,7 @@ def admin(username):
     print("3. Display all records.")
     print("4. More options for customer details.")
     print("5. Log out.")
+    # try catch to handle invalid input
     try:
         choice = int(input("Choice: "))
         if choice == 1:
@@ -339,7 +341,6 @@ def sign_up():
     print("Account created.")
     time.sleep(1)
     clear_screen()
-
 
 def log_in():
     print("Log in to your account.")
