@@ -176,7 +176,6 @@ def admin(username):
             admin(username)
 
     def customer_details():
-
         def display_customer_registration():
             clear_screen()
             # display customer registration details 
