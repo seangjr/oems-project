@@ -42,9 +42,11 @@ Begin
         Declar category, event_index, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string;
 
         Call function display_categories()
+
         Print("Event Category: ");
-        category = event_prompt(Get integer input);
-        Open events_file in read mode
+        Get category = event_prompt()
+
+        Open events_file in READ mode
             Read lines of file into filehandler
             For line in filehandler
                 Split line into event_details using " " as delimiter
@@ -59,8 +61,58 @@ Begin
                 If event_category is category then Print(event_index, "Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price: ", event_price, "Capacity: ", event_capacity);
             Endfor
         Close filehandler
+
     Endfunction
 
     Function admin(username: string)
-        S
+        Declare username as string;
+
+        Function add_event()
+            Declare event_number as integer;
+            Declare event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string;
+
+            Call function clear_screen();
+
+            Print("Add Event.");
+
+            Call function display_categories();
+
+            Open events_file in READ mode
+                event_number = 1;
+                Read lines of file into filehandler
+                    For line in filehandler
+                        event_number = event_number + Count of line with '\n' as delimiter;
+                    Endfor
+            Close filehandler
+
+            Print("Event Category: ");
+            Get event_category = event_prompt();
+
+            Print("Event Name: ");
+            Get event_name = event_prompt();
+
+            Print("Event Date: ");
+            Get event_date = event_prompt();
+
+            Print("Event Time: ");
+            Get event_time = event_prompt();
+
+            Print("Event Venue: ");
+            Get event_venue = event_prompt();
+
+            Print("Event Price: ");
+            Get event_price = event_prompt();
+
+            Print("Event Capacity: ");
+            Get event_capacity = event_prompt();
+
+            Open events_file in APPEND mode
+                Write event_number, " ", event_category, " ", event_name, " ", event_date, " ", event_time, " ", event_venue, " ", event_price, " ", event_capacity, "\n" to filehandler
+            Close filehandler
+            Print("Event added.");
+            Call function admin(username);
+        Endfunction
+
+        
+
 End
