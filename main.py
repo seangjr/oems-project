@@ -259,9 +259,13 @@ def customer():
     print("2. Checkout ")
     print("3. Exit ")
 
-    def eventcategory():
-        print("Event Category: ")
-        print("1. ")
+    def eventdetails():
+        print("Event List: ")
+        print("1. Weddings")
+        print("2. Concerts ")
+        print("3. Talent Shows ")
+        print("4. Seminars ")
+        print("5. Brand Activation ")
 
     def events():
         print("Events: ")
@@ -274,7 +278,7 @@ def customer():
     try:
         options = int(input("Choice: "))
         if options == 1:
-            eventcategory()
+            eventdetails()
         elif options == 2:
             checkout()
         elif options == 3:
