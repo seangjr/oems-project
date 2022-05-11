@@ -1,0 +1,118 @@
+Program event_management_program;
+Begin
+    Import os module, time module;
+    Declare working_path, users_file, events_file as string;
+    Declare categories as array of string;
+
+    working_path = get current working directory using os module;
+    users_file = working_path + "/data/users.txt";
+    events_file = working_path + "/data/events.txt";
+
+    categories = ['Weddings', 'Concerts', 'Talent_Shows', 'Seminars', 'Brand_Activation'];
+
+    Function clear_screen()
+        Using os module:
+            Clear screen
+    End Function;
+
+    Function event_prompt(choice: any)
+        If choice is not integer return choice as string replacing '_' with ' ';
+
+        If choice is 1:
+            return categories[0];
+        Elseif choice is 2:
+            return categories[1];
+        Elseif choice is 3:
+            return categories[2];
+        Elseif choice is 4:
+            return categories[3];
+        Elseif choice is 5:
+            return categories[4];
+    Endfunction
+
+    Function display_categories()
+        Print("Event Categories: ")
+        For element in categories:
+            Print(Index of element + 1, ": ", element with replaced '_' with ' ');
+        Endfor
+    Endfunction
+
+    Function event_list()
+        Declare event_details as array of string;
+        Declar category, event_index, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string;
+
+        Call function display_categories()
+
+        Print("Event Category: ");
+        Get category = event_prompt()
+
+        Open events_file in READ mode
+            Read lines of file into filehandler
+            For line in filehandler
+                Split line into event_details using " " as delimiter
+                event_index = event_details[0];
+                event_category = event_details[1];
+                event_name = event_details[2];
+                event_date = event_details[3];
+                event_time = event_details[4];
+                event_venue = event_details[5];
+                event_price = event_details[6];
+                event_capacity = event_details[7];
+                If event_category is category then Print(event_index, "Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price: ", event_price, "Capacity: ", event_capacity);
+            Endfor
+        Close filehandler
+
+    Endfunction
+
+    Function admin(username: string)
+        Declare username as string;
+
+        Function add_event()
+            Declare event_number as integer;
+            Declare event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string;
+
+            Call function clear_screen();
+
+            Print("Add Event.");
+
+            Call function display_categories();
+
+            Open events_file in READ mode
+                event_number = 1;
+                Read lines of file into filehandler
+                    For line in filehandler
+                        event_number = event_number + Count of line with '\n' as delimiter;
+                    Endfor
+            Close filehandler
+
+            Print("Event Category: ");
+            Get event_category = event_prompt();
+
+            Print("Event Name: ");
+            Get event_name = event_prompt();
+
+            Print("Event Date: ");
+            Get event_date = event_prompt();
+
+            Print("Event Time: ");
+            Get event_time = event_prompt();
+
+            Print("Event Venue: ");
+            Get event_venue = event_prompt();
+
+            Print("Event Price: ");
+            Get event_price = event_prompt();
+
+            Print("Event Capacity: ");
+            Get event_capacity = event_prompt();
+
+            Open events_file in APPEND mode
+                Write event_number, " ", event_category, " ", event_name, " ", event_date, " ", event_time, " ", event_venue, " ", event_price, " ", event_capacity, "\n" to filehandler
+            Close filehandler
+            Print("Event added.");
+            Call function admin(username);
+        Endfunction
+
+        
+
+End

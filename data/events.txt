@@ -1,4 +1,4 @@
-1 Concerts sdf 03-03-22 1900 KP 20 200
-2 Weddings sdf 03-04-22 1900 NP 20 300
-3 Talent_Shows Dance_show 09-03-22 1900 West_Plaza 0 500
+1 Concerts Keshi's_Concert 03-03-22 1900 Brine_Plaza 20 200
+2 Weddings Keith's_Wedding 03-04-22 1900 North_Plaza 20 300
+3 Talent_Shows Singing_Show 09-03-22 1900 West_Plaza 0 500
 4 Brand_Activation Brand_Activation1 121212 2323 city_hall 1500 600
