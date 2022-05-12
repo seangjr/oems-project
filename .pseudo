@@ -1,128 +1,134 @@
-Program event_management_program;
+Program event_management_program
 Begin
-    Import os module, time module;
-    Declare working_path, users_file, events_file as string;
-    Declare categories as array of string;
+    Import os module, time module
+    Declare working_path, users_file, events_file as string
+    Declare categories as array of string
 
-    working_path = get current working directory using os module;
-    users_file = working_path + "/data/users.txt";
-    events_file = working_path + "/data/events.txt";
+    working_path = get current working directory using os module
+    users_file = working_path + "/data/users.txt"
+    events_file = working_path + "/data/events.txt"
 
-    categories = ['Weddings', 'Concerts', 'Talent_Shows', 'Seminars', 'Brand_Activation'];
+    categories = ['Weddings', 'Concerts', 'Talent_Shows', 'Seminars', 'Brand_Activation']
 
     Function clear_screen()
         Using os module:
             Clear screen
-    End Function;
+    Endfunction
 
     Function event_prompt(choice: any)
-        If choice is not integer return choice as string replacing '_' with ' ';
+        If choice is not integer return choice as string replacing '_' with ' '
 
         If choice is 1:
-            return categories[0];
+            return categories[0]
         Elseif choice is 2:
-            return categories[1];
+            return categories[1]
         Elseif choice is 3:
-            return categories[2];
+            return categories[2]
         Elseif choice is 4:
-            return categories[3];
+            return categories[3]
         Elseif choice is 5:
-            return categories[4];
+            return categories[4]
     Endfunction
 
     Function display_categories()
         Print("Event Categories: ")
         For element in categories:
-            Print(Index of element + 1, ": ", element with replaced '_' with ' ');
+            Print(Index of element + 1, ": ", element with replaced '_' with ' ')
         Endfor
     Endfunction
 
     Function event_list()
-        Declare event_details as array of string;
-        Declar category, event_index, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string;
+        Declare event_details as array of string
+        Declar category, event_index, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string
+        Declare found as bool
+
+        found = False
 
         Call function display_categories()
 
-        Print("Event Category: ");
+        Print("Event Category: ")
         Get category = event_prompt()
 
         Open events_file in READ mode
             Read lines of file into filehandler
             For line in filehandler
                 Split line into event_details using " " as delimiter
-                event_index = event_details[0];
-                event_category = event_details[1];
-                event_name = event_details[2];
-                event_date = event_details[3];
-                event_time = event_details[4];
-                event_venue = event_details[5];
-                event_price = event_details[6];
-                event_capacity = event_details[7];
-                If event_category is category then Print(event_index, "Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price: ", event_price, "Capacity: ", event_capacity);
+                event_index = event_details[0]
+                event_category = event_details[1]
+                event_name = event_details[2]
+                event_date = event_details[3]
+                event_time = event_details[4]
+                event_venue = event_details[5]
+                event_price = event_details[6]
+                event_capacity = event_details[7]
+                If event_category is category then
+                    found = True 
+                    Print("Event no.", event_index, "→ Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price: ", event_price, "Capacity: ", event_capacity)
             Endfor
         Close filehandler
-
+        return found
     Endfunction
 
     Function admin(username: string)
-        Declare parameter username as string;
+        Declare parameter username as string
+        Declare choice as integer
 
         Function add_event()
-            Declare event_number as integer;
-            Declare event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string;
+            Declare event_number as integer
+            Declare event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string
 
-            Call function clear_screen();
+            Call function clear_screen()
 
-            Print("Add Event.");
+            Print("Add Event.")
 
-            Call function display_categories();
+            Call function display_categories()
 
             Open events_file in READ mode
-                event_number = 1;
+                event_number = 1
                 Read lines of file into filehandler
                     For line in filehandler
-                        event_number = event_number + Count of line with '\n' as delimiter;
+                        event_number = event_number + Count of line with '\n' as delimiter
                     Endfor
             Close filehandler
 
-            Print("Event Category: ");
-            Get event_category = event_prompt();
+            Print("Event Category: ")
+            Get event_category = event_prompt()
 
-            Print("Event Name: ");
-            Get event_name = event_prompt();
+            Print("Event Name: ")
+            Get event_name = event_prompt()
 
-            Print("Event Date: ");
-            Get event_date = event_prompt();
+            Print("Event Date: ")
+            Get event_date = event_prompt()
 
-            Print("Event Time: ");
-            Get event_time = event_prompt();
+            Print("Event Time: ")
+            Get event_time = event_prompt()
 
-            Print("Event Venue: ");
-            Get event_venue = event_prompt();
+            Print("Event Venue: ")
+            Get event_venue = event_prompt()
 
-            Print("Event Price: ");
-            Get event_price = event_prompt();
+            Print("Event Price: ")
+            Get event_price = event_prompt()
 
-            Print("Event Capacity: ");
-            Get event_capacity = event_prompt();
+            Print("Event Capacity: ")
+            Get event_capacity = event_prompt()
 
             Open events_file in APPEND mode
                 Write event_number, " ", event_category, " ", event_name, " ", event_date, " ", event_time, " ", event_venue, " ", event_price, " ", event_capacity, "\n" to filehandler
             Close filehandler
-            Print("Event added.");
-            Call function admin(username);
+            Print("Event added.")
+            Call function admin(username)
         Endfunction
 
         Function modify_event()
-            Declare event_to_modify, choice as integer;
-            Declare filedata as array of string;
-            Declare temp_line, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string;
+            Declare event_to_modify, choice as integer
+            Declare filedata, modified_filedata as array of string
+            Declare temp_line, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity, new_category, new_name, new_date, new_time, new_venue, new_price, new_capacity as string
 
-            Call function clear_screen();
-            Print("List of events... choose a category to dislay an event!");
-            Call function event_list();
-            Print("Modify event. Please enter the event number to modify: ");
-            Print("Event number: );
+            Call function clear_screen()
+            Print("List of events... choose a category to dislay an event!")
+            Call function event_list()
+            Print("Modify event. Please enter the event number to modify: ")
+            Print("Event number: )
             Get event_to_modify
 
             Open events_file in READ mode
@@ -134,22 +140,245 @@ Begin
                 temp_line = line
                 If first char of line is event_to_modify then
                     Split line into event_details using " " as delimiter
-                    event_index = event_details[0];
-                    event_category = event_details[1];
-                    event_name = event_details[2];
-                    event_date = event_details[3];
-                    event_time = event_details[4];
-                    event_venue = event_details[5];
-                    event_price = event_details[6];
-                    event_capacity = event_details[7];
+                    event_index = event_details[0]
+                    event_category = event_details[1]
+                    event_name = event_details[2]
+                    event_date = event_details[3]
+                    event_time = event_details[4]
+                    event_venue = event_details[5]
+                    event_price = event_details[6]
+                    event_capacity = event_details[7]
 
-                    Print("Event no. ", event_index, "→ Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price: ", event_price, "Capacity: ", event_capacity);
+                    Print("Event no. ", event_index, "→ Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price: ", event_price, "Capacity: ", event_capacity)
 
-                    Print("Choice: )"
+                    Print("Please enter the field you want to modify: ")
+                    Print("1. Category")
+                    Print("2. Name")
+                    Print("3. Date")
+                    Print("4. Time")
+                    Print("5. Venue")
+                    Print("6. Price")
+                    Print("7. Capacity")
+                    Print("8. Delete line")
+                    Print("9. Back")
+
+                    Print("Choice: ")
                     Get choice
 
                     If choice is 1 then
-                        Call function display_categories();
-                        
+                        Call function display_categories()
+                        Print("Event Category: ")
+                        Get new_category = event_prompt()
+                        event_category = new_category
+                    Elseif choice is 2 then
+                        Print("Event Name: ")
+                        Get new_name = event_prompt()
+                        event_name = new_name
+                    Elseif choice is 3 then
+                        Print("Event Date: ")
+                        Get new_date = event_prompt()
+                        event_date = new_date
+                    Elseif choice is 4 then
+                        Print("Event Time: ")
+                        Get new_time = event_prompt()
+                        event_time = new_time
+                    Elseif choice is 5 then
+                        Print("Event Venue: ")
+                        Get new_venue = event_prompt()
+                        event_venue = new_venue
+                    Elseif choice is 6 then
+                        Print("Event Price: ")
+                        Get new_price = event_prompt()
+                        event_price = new_price
+                    Elseif choice is 7 then
+                        Print("Event Capacity: ")
+                        Get new_capacity = event_prompt()
+                        event_capacity = new_capacity
+                    Elseif choice is 8 then
+                        line = ""
+                    Elseif choice is 9 then
+                        Return admin(username)
+                    Endif
+
+                    If choice is not 1 to 8 then
+                        Print("Invalid input. Try again!")
+                        return admin(username)
+                    Endif
+
+                    For item in filedata
+                        If item is temp_line then
+                            item = item with temp_line replaced as line
+                        Endif
+                    Endfor
+
+                    modified_filedata = []
+                    For strings in filedata
+                        If strings is not empty then
+                            Append strings to modified_filedata
+                        Endif
+                    Endfor
+
+                    For item in modified_filedata
+                        item = item with first char replaced as index of item + 1
+                    Endfor
+
+                    Open events_file in WRITE mode
+                        Write lines of modified_filedata to filehandler
+                    Close filehandler
+
+                    Print("Event modified.")
+                    Call function admin(username)
+                Endif
+            Endfor
+        Endfunction
+
+        Function display_event()
+            Declare choice as string
+            Call function clear_screen()
+            Print("Displaying all events...")
+            Call function event_list()
+            Print("Type 'e' to exit when ready: ")
+            If lowercase of choice is not 'e' then
+                Print("Invalid input!")
+                return display_event()
+            Else
+                Return admin(username)
+            Endif
+        Endfunction
+
+        Function customer_details()
+            Declare choice as integer
+
+            Function display_customer_registration()
+                Declare user, permission registration_date, choice as string
+
+                Call function clear_screen()
+                Open users_file in READ mode
+                    Read lines of file into filehandler
+                    For line in filehandler
+                        Split line into user_details using " " as delimiter
+                        user = user_details[0]
+                        permission = user_details[2]
+                        registration_date = user_details[3]
+                        If permission is not 'True' then    
+                            Print("User: ", user, "Registration date: ", registration_date)
+                        Endif
+                    Endfor
+                Close filehandler
+
+                Print("Type 'e' to exit when ready: ")
+                Get Choice
+                If lowercase of choice is not 'e' then
+                    Print("Invalid input!")
+                    return display_customer_registration()
+                Else
+                    Return admin(username)
+                Endif
+            Endfunction
+
+            Function search_customer_registration()
+                Declare search_username, choice as string
+                Call function clear_screen()
+                Print("Search customer registration.")
+                Print("Search username: ")
+                Get search_username
+                Open users_file in READ mode
+                    Print("Searching usernames starting with '", search_username, "'...")
+                    Read lines of file into filehandler
+                    For line in filehandler
+                        Split line into user_details using " " as delimiter
+                        user = user_details[0]
+                        permission = user_details[2]
+                        registration_date = user_details[3]
+                        If user starts with search_username and permission is not 'True' then
+                            Print("User: ", user, "Registration date: ", registration_date)
+                        Endif
+                    Endfor
+                Close filehandler
+                Print("Type 'e' to exit when ready: ")
+                Get Choice
+                If lowercase of choice is not 'e' then
+                    Print("Invalid input!")
+                    return search_customer_registration()
+                Else
+                    Return admin(username)
+                Endif
+            Endfunction
+
+            Call clear_screen()
+            Print("Customer details! Select an option below: ")
+            Print("1. Display all customer registration")
+            Print("2. Display customer payment")
+            Print("3. Search customer registration")
+            Print("4. Search customer payment")
+            Print("5. Back")
+
+            Print("Choice: ")
+            Get choice
+            If choice is 1 then
+                Call display_customer_registration()
+            Elseif choice is 2 then
+                Call display_customer_payment()
+            Elseif choice is 3 then
+                Call search_customer_registration()
+            Elseif choice is 4 then
+                Call search_customer_payment()
+            Elseif choice is 5 then
+                Return admin(username)
+            Endif
+        Endfunction
+    
+        Call function clear_screen()
+        Print("Hi ", username, "! Welcome to the admin panel! Select options below: ")
+        Print("1. Creat event.")
+        Print("2. Modify event.")
+        Print("3. Display all records")
+        Print("4. More options for customer details.")
+        Print("5. Log out.")
+        
+        Print("Choice: ")
+        Get choice
+        If choice is 1 then
+            Call function add_event()
+        Elseif choice is 2 then
+            Call function modify_event()
+        Elseif choice is 3 then
+            Call function display_event()
+        Elseif choice is 4 then
+            Call function customer_details()
+        Elseif choice is 5 then
+            Print("Logging out...")
+            Call clear_screen()
+            return
+        Else
+            Print("Error! Invalid input. Try again!")
+            return admin(username)
+        Endif
+            Call function main()
+    Endfunction
+
+    Function view_events()
+        Declare choice as integer
+        Declare event_found as bool
+        Call function clear_screen()
+
+        Print("Welcome! Select your options below!")
+        Print("1. View all events by category.")
+        Print("2. Back")
+
+        Print("Choice: ")
+        Get choice
+        If choice is not 1 and is not 2 then
+            Print("Invalid input!")
+            return
+        If choice is 2 then
+            return
+        Endif
+        Call function clear_screen()
+        event_found = event_list()
+        if event_found is false then
+            Print("No events found!")
+        Endif
+    Endfunction
 
 End
