@@ -1,6 +1,5 @@
 import os
 import time
-import datetime
 
 # constants
 working_path = os.getcwd()
@@ -70,6 +69,14 @@ def event_list():
     return found
 
 
+def count_line(file: str):
+    with open(file, 'r') as file:
+        line_number = 1
+        for line in file.readlines():
+            line_number += line.count('\n')
+    return line_number
+
+
 def admin(username: str):
 
     def add_event():
@@ -78,10 +85,7 @@ def admin(username: str):
         display_categories()
         try:
             # event number [0]
-            with open(events_file, 'r') as file:
-                event_number = 1
-                for line in file.readlines():
-                    event_number += line.count('\n')
+            event_number = count_line(events_file)
             # index [1]
             event_category = event_prompt(int(input("Event Category: ")))
             # event name [2]
@@ -104,7 +108,6 @@ def admin(username: str):
             file.write(
                 f"{event_number} {event_category} {event_name} {event_date} {event_time} {event_venue} {event_price} {event_capacity}\n")
         print("Event added.")
-        time.sleep(1)
         # recursive call
         admin(username)
 
@@ -171,18 +174,27 @@ def admin(username: str):
                 # add error handling **
                 if choice not in range(1, 9):
                     print("Invalid input. Try again!")
-                    time.sleep(2)
                     return admin(username)
 
                 # replace old line with new line, while preserving the rest of the file
                 filedata = [item.replace(temp_line, line)
                             for item in filedata if item]
 
+                # filedata still contains empty strings, so remove them
+                modified_filedata = []
+                for strings in filedata:
+                    if strings != "":
+                        modified_filedata.append(strings)
+
+                # replace line number with new line number
+                modified_filedata = [item.replace(
+                    item[:1], str(modified_filedata.index(item)+1)) for item in modified_filedata]
+
                 # write modified file data to file
                 with open(events_file, 'w') as file:
-                    file.writelines(filedata)
+                    file.writelines(modified_filedata)
+
                 print("Event modified...")
-                time.sleep(1)
                 return admin(username)
 
     def display_event():

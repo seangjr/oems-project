@@ -65,7 +65,7 @@ Begin
     Endfunction
 
     Function admin(username: string)
-        Declare username as string;
+        Declare parameter username as string;
 
         Function add_event()
             Declare event_number as integer;
@@ -113,6 +113,43 @@ Begin
             Call function admin(username);
         Endfunction
 
-        
+        Function modify_event()
+            Declare event_to_modify, choice as integer;
+            Declare filedata as array of string;
+            Declare temp_line, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string;
+
+            Call function clear_screen();
+            Print("List of events... choose a category to dislay an event!");
+            Call function event_list();
+            Print("Modify event. Please enter the event number to modify: ");
+            Print("Event number: );
+            Get event_to_modify
+
+            Open events_file in READ mode
+                Read lines of file into filehandler
+                Split filehandler into filedata using '\n' as delimiter
+            Close filehandler
+
+            For line in filedata:
+                temp_line = line
+                If first char of line is event_to_modify then
+                    Split line into event_details using " " as delimiter
+                    event_index = event_details[0];
+                    event_category = event_details[1];
+                    event_name = event_details[2];
+                    event_date = event_details[3];
+                    event_time = event_details[4];
+                    event_venue = event_details[5];
+                    event_price = event_details[6];
+                    event_capacity = event_details[7];
+
+                    Print("Event no. ", event_index, "→ Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price: ", event_price, "Capacity: ", event_capacity);
+
+                    Print("Choice: )"
+                    Get choice
+
+                    If choice is 1 then
+                        Call function display_categories();
+                        
 
 End
