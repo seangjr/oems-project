@@ -199,16 +199,16 @@ def admin(username: str):
 
     def display_event():
         clear_screen()
-        print(f"Displaying all events...")
+        print("Displaying all events...")
         event_list()
         choice = input("Type 'e' to exit when ready: ")
         # exit if user types 'e'
         if choice.lower() != "e":
             print("Invalid input!")
             time.sleep(2)
-            display_event()
+            return display_event()
         else:
-            admin(username)
+            return admin(username)
 
     def customer_details():
         def display_customer_registration():
@@ -231,9 +231,9 @@ def admin(username: str):
             if choice.lower() != "e":
                 print("Invalid input!")
                 time.sleep(2)
-                display_event()
+                return display_customer_registration()
             else:
-                admin(username)
+                return admin(username)
 
         def search_customer_registration():
             clear_screen()
@@ -267,7 +267,7 @@ def admin(username: str):
 
         # customer details menu
         clear_screen()
-        print("Customer details! Select an option below: \n1. Display customer registration\n2. Display customer payment\n3. Search customer registration\n4. Search customer payment\n5. Back")
+        print("Customer details! Select an option below: \n1. Display all customer registration\n2. Display customer payment\n3. Search customer registration\n4. Search customer payment\n5. Back")
         choice = int(input("Choice: "))
         if choice == 1:
             display_customer_registration()
@@ -282,7 +282,7 @@ def admin(username: str):
 
     # admin main menu
     clear_screen()
-    print(f"Hi {username}! Select options below: ")
+    print(f"Hi {username}! Welcome to the admin panel! Select options below: ")
     print("1. Create event.")
     print("2. Modify event record.")
     print("3. Display all records.")
@@ -314,7 +314,7 @@ def admin(username: str):
 def view_events():
     # unregistered users view events
     clear_screen()
-    print("Welcome! Select your options below!\n1. View events by category\n2. Back")
+    print("Welcome! Select your options below!\n1. View all events by category\n2. Back")
     choice = int(input("Choice: "))
     if choice != 1 and choice != 2:
         print("Invalid input!")
