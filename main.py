@@ -198,13 +198,13 @@ def admin(username: str):
 
                     print("Event modified...")
                     return admin(username)
-
         print("No event found!")
 
     def display_event():
         clear_screen()
         print("Displaying all events...")
-        event_list()
+        event_found = event_list()
+        print("No event found in this cateory!") if not event_found else ""
         choice = input("Type 'e' to exit when ready: ")
         # exit if user types 'e'
         if choice.lower() != "e":
