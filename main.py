@@ -114,9 +114,7 @@ def admin(username: str):
     def modify_event():
         clear_screen()
         print("List of events... choose a category to display an event!")
-        event_list()
-        print("Modify event. Please enter the event number to modify: ")
-        event_to_modify = int(input("Event number: "))
+        event_found = event_list()
         with open(events_file, 'r') as file:
             # read file line by line -> output to list var filedata
             filedata = file.readlines()
@@ -126,76 +124,82 @@ def admin(username: str):
             # store unmodified line in a variable, which will be used later
             temp_line = line
             # if event number matches, modify event
-            if line[:1] == str(event_to_modify):
-                # split line by space
-                event_details = line.split()
-                event_index = event_details[0]
-                event_category = event_details[1]
-                event_name = event_details[2]
-                event_date = event_details[3]
-                event_time = event_details[4]
-                event_venue = event_details[5]
-                event_price = event_details[6]
-                event_capacity = event_details[7]
-                # display event details
-                print(f"Event no. {event_index} → Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
-                print("Please enter the field you want to modify: \n1. Category\n2. Name\n3. Date\n4. Time\n5. Venue\n6. Price\n7. Capacity\n8. Delete line\n9. Back")
-                # get user input
-                choice = int(input("Choice: "))
-                # modify event based on user input
-                if choice == 1:
-                    display_categories()
-                    line = line.replace(event_category, event_prompt(
-                        int(input("Event Category: "))))
-                elif choice == 2:
-                    line = line.replace(
-                        event_name, event_prompt(input("Event name: ")))
-                elif choice == 3:
-                    line = line.replace(event_date, event_prompt(
-                        input("Event date (dd-mm-yy): ")))
-                elif choice == 4:
-                    line = line.replace(event_time, event_prompt(
-                        input("Event time (24 hour format): ")))
-                elif choice == 5:
-                    line = line.replace(
-                        event_venue, event_prompt(input("Event venue: ")))
-                elif choice == 6:
-                    line = line.replace(event_price, event_prompt(
-                        input("Event price (RM): ")))
-                elif choice == 7:
-                    line = line.replace(event_capacity, event_prompt(
-                        input("Event capacity: ")))
-                elif choice == 8:
-                    # delete line
-                    line = ""
-                elif choice == 9:
+            if event_found:
+                print("Modify event. Please enter the event number to modify: ")
+                event_to_modify = int(input("Event number: "))
+
+                if line[:1] == str(event_to_modify):
+                    # split line by space
+                    event_details = line.split()
+                    event_index = event_details[0]
+                    event_category = event_details[1]
+                    event_name = event_details[2]
+                    event_date = event_details[3]
+                    event_time = event_details[4]
+                    event_venue = event_details[5]
+                    event_price = event_details[6]
+                    event_capacity = event_details[7]
+                    # display event details
+                    print(f"Event no. {event_index} → Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
+                    print("Please enter the field you want to modify: \n1. Category\n2. Name\n3. Date\n4. Time\n5. Venue\n6. Price\n7. Capacity\n8. Delete line\n9. Back")
+                    # get user input
+                    choice = int(input("Choice: "))
+                    # modify event based on user input
+                    if choice == 1:
+                        display_categories()
+                        line = line.replace(event_category, event_prompt(
+                            int(input("Event Category: "))))
+                    elif choice == 2:
+                        line = line.replace(
+                            event_name, event_prompt(input("Event name: ")))
+                    elif choice == 3:
+                        line = line.replace(event_date, event_prompt(
+                            input("Event date (dd-mm-yy): ")))
+                    elif choice == 4:
+                        line = line.replace(event_time, event_prompt(
+                            input("Event time (24 hour format): ")))
+                    elif choice == 5:
+                        line = line.replace(
+                            event_venue, event_prompt(input("Event venue: ")))
+                    elif choice == 6:
+                        line = line.replace(event_price, event_prompt(
+                            input("Event price (RM): ")))
+                    elif choice == 7:
+                        line = line.replace(event_capacity, event_prompt(
+                            input("Event capacity: ")))
+                    elif choice == 8:
+                        # delete line
+                        line = ""
+                    elif choice == 9:
+                        return admin(username)
+
+                    # add error handling **
+                    if choice not in range(1, 9):
+                        print("Invalid input. Try again!")
+                        return admin(username)
+
+                    # replace old line with new line, while preserving the rest of the file
+                    filedata = [item.replace(temp_line, line)
+                                for item in filedata if item]
+
+                    # filedata still contains empty strings, so remove them
+                    modified_filedata = []
+                    for strings in filedata:
+                        if strings != "":
+                            modified_filedata.append(strings)
+
+                    # replace line number with new line number
+                    modified_filedata = [item.replace(
+                        item[:1], str(modified_filedata.index(item)+1)) for item in modified_filedata]
+
+                    # write modified file data to file
+                    with open(events_file, 'w') as file:
+                        file.writelines(modified_filedata)
+
+                    print("Event modified...")
                     return admin(username)
 
-                # add error handling **
-                if choice not in range(1, 9):
-                    print("Invalid input. Try again!")
-                    return admin(username)
-
-                # replace old line with new line, while preserving the rest of the file
-                filedata = [item.replace(temp_line, line)
-                            for item in filedata if item]
-
-                # filedata still contains empty strings, so remove them
-                modified_filedata = []
-                for strings in filedata:
-                    if strings != "":
-                        modified_filedata.append(strings)
-
-                # replace line number with new line number
-                modified_filedata = [item.replace(
-                    item[:1], str(modified_filedata.index(item)+1)) for item in modified_filedata]
-
-                # write modified file data to file
-                with open(events_file, 'w') as file:
-                    file.writelines(modified_filedata)
-
-                print("Event modified...")
-                return admin(username)
+        print("No event found!")
 
     def display_event():
         clear_screen()
