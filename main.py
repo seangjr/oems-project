@@ -339,29 +339,24 @@ def customer():
     print("3. Checkout")
     print("4. Exit ")
 
-    def eventselection():
-        print("1. Weddings ")
-        print("2. Concerts ")
-        print("3. Talent Shows ")
-        print("4. Seminars ")
-        print("5. Brand Activation ")
-        selection = int(
-            input("Select the event to show it's description and pricing: "))
+    def selection():
+        selection = int(input("The number of events wanting to checkout: "))
         if selection == 1:
-            print(
-                "Wedding organizing package with flower bouquet and emcee. RM29000 per event")
-        if selection == 2:
-            print(
-                "Concert organizing package with small pantry and welcome drinks. RM15000 per event")
-        if selection == 3:
-            print(
-                "Talent show organizing package with emcee, judges and trophy. RM7000 per event")
-        if selection == 4:
-            print(
-                "Seminars organizing package with motivational speaker or lecturer. RM1500 per event")
-        if selection == 5:
-            print(
-                "Brand activation with lion dance and ribbon cutting ceremony. RM4000 per event")
+            display_categories()
+            cart = int(input("Choose the events to checkout: "))
+        elif selection == 2:
+            display_categories()
+            num1 = int(input())
+            num2 = int(input())
+
+        elif selection == 3:
+            display_categories()
+            num1 = int(input())
+            num2 =
+            num3 =
+        cart = int(input("Choose the events to checkout: "))
+
+    def cart():
 
     def checkout():
         payment = int(input("Please select checkout method: "))
@@ -372,8 +367,10 @@ def customer():
         options = int(input("Choice: "))
         if options == 1:
             display_categories()
-        elif options == 2:
+            return
             event_prompt()
+        # elif options == 2:
+            # event_prompt()
         elif options == 3:
             cart()
         elif options == 4:
