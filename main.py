@@ -109,7 +109,7 @@ def admin(username: str):
                 f"{event_number} {event_category} {event_name} {event_date} {event_time} {event_venue} {event_price} {event_capacity}\n")
         print("Event added.")
         # recursive call
-        admin(username)
+        return admin(username)
 
     def modify_event():
         clear_screen()
@@ -385,22 +385,20 @@ def sign_up():
     # check if password is more than 8 characters
     if len(password) < 8:
         print("Password must be at least 8 characters.")
-        time.sleep(1)
         sign_up()
 
     # check if password and confirm password are the same
     if confirm_password != password:
         print("Passwords do not match.")
-        time.sleep(1)
         return
 
     # check if username is taken
     with open(users_file, "r") as file:
         for line in file:
-            if line.split()[0] == username:
+            user_details = line.split()
+            if user_details[0] == username:
                 print("Username taken.")
-                time.sleep(1)
-                return
+                return sign_up()
 
     # create user file. DEFAULTS TO FALSE -> customer permission
     user_permission = False
@@ -411,8 +409,8 @@ def sign_up():
         file.write(
             f"{username} {password} {user_permission} {date_registered}\n")
     print("Account created.")
-    time.sleep(1)
     clear_screen()
+    return main()
 
 
 def log_in():
@@ -425,21 +423,21 @@ def log_in():
             Read for username and password. 
             If username and password match, then authenticated.
             """
-            if line.split()[0] == username and line.split()[1] == password:
+            user_details = line.split()
+            if user_details[0] == username and user_details[1] == password:
                 print("Logged in.")
                 # call auth function
-                if line.split()[2] == "True":
+                if user_details[2] == "True":
                     # if user is admin
                     admin(username)
                 else:
                     # else if user is customer call the customer function
                     customer()
-                time.sleep(1)
                 return
 
     print("Invalid username or password.")
-    time.sleep(1)
     clear_screen()
+    return main()
 
 # main function
 
@@ -460,17 +458,13 @@ def main():
             view_events()
         elif choice == 4:
             print("Exiting...")
-            time.sleep(1)
             clear_screen()
             exit()
     except ValueError:
         print("Invalid choice.")
-        time.sleep(1)
         clear_screen()
-        main()
+        return main()
     main()
-    return 0
 
 
-if __name__ == "__main__":
-    main()
+main()

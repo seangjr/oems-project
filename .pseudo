@@ -16,7 +16,7 @@ Begin
     Endfunction
 
     Function event_prompt(choice: any)
-        If choice is not integer return choice as string replacing '_' with ' '
+        If choice is not integer return choice as String replacing '_' with ' '
 
         If choice is 1:
             return categories[0]
@@ -32,8 +32,8 @@ Begin
 
     Function display_categories()
         Print("Event Categories: ")
-        For element in categories:
-            Print(Index of element + 1, ": ", element with replaced '_' with ' ')
+        For element in categories
+            Print(Index of element + 1, ": ", element replaced '_' with ' ')
         Endfor
     Endfunction
 
@@ -69,7 +69,20 @@ Begin
         return found
     Endfunction
 
-    Function admin(username: string)
+    Function count_line(file)
+        Declare parameter file as string
+        Declare line_number as integer
+        Open file in READ mode
+            Read lines of file into filehandler
+            line_number = 1
+            For line in filehandler
+                line_number = line_number + 1
+            Endfor
+        Close filehandler
+        Return line_number
+    Endfunction
+
+    Function admin(username)
         Declare parameter username as string
         Declare choice as integer
 
@@ -82,41 +95,34 @@ Begin
             Print("Add Event.")
 
             Call function display_categories()
-
-            Open events_file in READ mode
-                event_number = 1
-                Read lines of file into filehandler
-                    For line in filehandler
-                        event_number = event_number + Count of line with '\n' as delimiter
-                    Endfor
-            Close filehandler
+            event_number = count_line(events_file)
 
             Print("Event Category: ")
-            Get event_category = event_prompt()
+            event_prompt(Get category)
 
             Print("Event Name: ")
-            Get event_name = event_prompt()
+            event_prompt(Get event_name)
 
             Print("Event Date: ")
-            Get event_date = event_prompt()
+            event_prompt(Get event_date)
 
             Print("Event Time: ")
-            Get event_time = event_prompt()
+            event_prompt(Get event_time)
 
             Print("Event Venue: ")
-            Get event_venue = event_prompt()
+            event_prompt(Get event_venue)
 
             Print("Event Price: ")
-            Get event_price = event_prompt()
+            event_prompt(Get event_price)
 
             Print("Event Capacity: ")
-            Get event_capacity = event_prompt()
+            event_prompt(Get event_capacity)
 
             Open events_file in APPEND mode
                 Write event_number, " ", event_category, " ", event_name, " ", event_date, " ", event_time, " ", event_venue, " ", event_price, " ", event_capacity, "\n" to filehandler
             Close filehandler
             Print("Event added.")
-            Call function admin(username)
+            Return admin(username)
         Endfunction
 
         Function modify_event()
@@ -168,31 +174,30 @@ Begin
                     If choice is 1 then
                         Call function display_categories()
                         Print("Event Category: ")
-                        Get new_category = event_prompt()
+                        event_prompt(Get new_category)
                         event_category = new_category
-                    Elseif choice is 2 then
+                    Elsef choice is 2 then
                         Print("Event Name: ")
-                        Get new_name = event_prompt()
+                        event_prompt(Get new_name)
                         event_name = new_name
                     Elseif choice is 3 then
                         Print("Event Date: ")
-                        Get new_date = event_prompt()
+                        event_prompt(Get new_date)
                         event_date = new_date
                     Elseif choice is 4 then
                         Print("Event Time: ")
-                        Get new_time = event_prompt()
+                        event_prompt(Get new_time)
                         event_time = new_time
                     Elseif choice is 5 then
                         Print("Event Venue: ")
-                        Get new_venue = event_prompt()
-                        event_venue = new_venue
+                        event_prompt(Get new_venue)
                     Elseif choice is 6 then
                         Print("Event Price: ")
-                        Get new_price = event_prompt()
+                        event_prompt(Get new_price)
                         event_price = new_price
                     Elseif choice is 7 then
                         Print("Event Capacity: ")
-                        Get new_capacity = event_prompt()
+                        event_prompt(Get new_capacity)
                         event_capacity = new_capacity
                     Elseif choice is 8 then
                         line = ""
@@ -381,4 +386,108 @@ Begin
         Endif
     Endfunction
 
+    Function sign_up()
+        Declare username, password, confirm_password as string
+        Declare user_permission as boolean
+
+        Print("Sign up for an account.")
+        Print("Username: ")
+        Get username
+        Print("Password: ")
+        Get password
+        Print("Confirm password: ")
+        Get confirm_password
+
+        If length of password is less than 8 then
+            Print("Password must be at least 8 characters long!")
+            return sign_up()
+        Endif
+
+        If confirm_password is not equal to password then
+            Print("Passwords do not match.")
+            return sign_up()
+        Endif
+
+        Open users_file in READ mode
+            Read lines of file into filehandler
+            For line in filehandler
+                Split line into user_details using " " as delimiter
+                If user_details[0] is username then
+                    Print("Username already exists!")
+                    return sign_up()
+                Endif
+            Endfor
+        Close filehandler
+
+        user_permission = False
+        date_registered = Date today using time module
+
+        Open users_file in APPEND mode
+            Write username, " ", password, " ", user_permission, " ", date_registered, "\n"
+        Close filehandler
+
+        Print("Account created")
+        Call function clear_screen()
+        return main()
+    
+    Function log_in()
+        Declare username, password as string
+
+        Print("Log in to your account.")
+        Print("Username: ")
+        Get username
+        Print("Password: ")
+        Get password
+
+        Open users_file in READ mode
+            Read lines of file into filehandler
+            For line in filehandler
+                Split line into user_details using " " as delimiter
+                If user_details[0] is username and user_details[1] is password then
+                    Print("Logged in")
+                    If user_details[2] is 'True' then
+                        Call function admin(username)
+                    Else
+                        Call function customer(username)
+                    Endif
+                    Return
+                Endif
+
+            Endfor
+        Close filehandler
+        Print("Invalid username or password.")
+        Call function clear_screen()
+        return main()
+    Endfunction
+
+    Function main()
+        Declare choice as integer
+        Call function clear_screen()
+        Print("Welcome to Asian Event Management Services! Select option below: ")
+        Print("1. Sign up.")
+        Print("2. Log in.")
+        Print("3. View events.")
+        Print("4. Exit.")
+
+        Print("Choice: ")
+        Get choice
+        If choice is 1 then
+            Call function sign_up()
+        Elseif choice is 2 then
+            Call function log_in()
+        Elseif choice is 3 then
+            Call function view_events()
+        Elseif choice is 4 then
+            Print("Exiting...")
+            Call function clear_screen()
+            return
+        Else
+            Print("Invalid choice.")
+            Call function clear_screen()
+            return main()
+        Endif
+        main()
+    Endfunction
+
+    Call function main()
 End
