@@ -334,9 +334,10 @@ def view_events():
 
 def customer():
     print("Welcome! Select options below: ")
-    print("1. Event Details ")
-    print("2. Checkout ")
-    print("3. Exit ")
+    print("1. Event Category ")
+    print("2. Events")
+    print("3. Checkout")
+    print("4. Exit ")
 
     def eventselection():
         print("1. Weddings ")
@@ -370,10 +371,12 @@ def customer():
     try:
         options = int(input("Choice: "))
         if options == 1:
-            eventselection()
+            display_categories()
         elif options == 2:
-            checkout()
+            event_prompt()
         elif options == 3:
+            cart()
+        elif options == 4:
             print("Exiting...")
             time.sleep(1)
             clear_screen()
