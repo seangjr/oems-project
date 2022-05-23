@@ -338,30 +338,39 @@ def customer():
     print("2. Checkout ")
     print("3. Exit ")
 
-    def eventdetails():
-        print("Event List: ")
-        print("1. Weddings")
+    def eventselection():
+        print("1. Weddings ")
         print("2. Concerts ")
         print("3. Talent Shows ")
         print("4. Seminars ")
         print("5. Brand Activation ")
-
-    def eventcategory():
-        print("Event Category: ")
-        print("1. ")
-
-    def events():
-        print("Events: ")
-        print("1. ")
+        selection = int(
+            input("Select the event to show it's description and pricing: "))
+        if selection == 1:
+            print(
+                "Wedding organizing package with flower bouquet and emcee. RM29000 per event")
+        if selection == 2:
+            print(
+                "Concert organizing package with small pantry and welcome drinks . RM15000 per event")
+        if selection == 3:
+            print(
+                "Talent show organizing package with emcee, judges and trophy. RM7000 per event")
+        if selection == 4:
+            print(
+                "Seminars organizing package with motivational speaker or lecturer. RM1500 per event")
+        if selection == 5:
+            print(
+                "Brand activation with lion dance and ribbon cutting ceremony. RM4000 per event")
 
     def checkout():
-        print("Checkout: ")
-        print("1. ")
+        payment = int(input("Please select checkout method: "))
+        print("1. E-wallet")
+        print("2. Bank transfer")
 
     try:
         options = int(input("Choice: "))
         if options == 1:
-            eventdetails()
+            eventselection()
         elif options == 2:
             checkout()
         elif options == 3:
