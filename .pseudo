@@ -389,6 +389,7 @@ Begin
     Function sign_up()
         Declare username, password, confirm_password as string
         Declare user_permission as boolean
+        Declare user_details as array of string
 
         Print("Sign up for an account.")
         Print("Username: ")

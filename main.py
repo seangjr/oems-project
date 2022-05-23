@@ -351,7 +351,7 @@ def customer():
                 "Wedding organizing package with flower bouquet and emcee. RM29000 per event")
         if selection == 2:
             print(
-                "Concert organizing package with small pantry and welcome drinks . RM15000 per event")
+                "Concert organizing package with small pantry and welcome drinks. RM15000 per event")
         if selection == 3:
             print(
                 "Talent show organizing package with emcee, judges and trophy. RM7000 per event")
