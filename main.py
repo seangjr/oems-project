@@ -257,6 +257,18 @@ def admin(username: str):
                     transaction_id = payment_details[0]
                     payment_username = payment_details[1]
                     payment_total = payment_details[2]
+                    payment_date = payment_details[3]
+
+                    print(
+                        f"Transaction ID: {transaction_id}, Username: {payment_username}, Total: {payment_total}, Date of payment: {payment_date}")
+            # exit when 'e' is entered
+            choice = input("Type 'e' to exit when ready: ")
+            if choice.lower() != "e":
+                print("Invalid input!")
+                time.sleep(2)
+                return display_customer_payment()
+            else:
+                return admin(username)
 
         def search_customer_registration():
             clear_screen()
@@ -295,7 +307,7 @@ def admin(username: str):
         if choice == 1:
             display_customer_registration()
         elif choice == 2:
-            print("2")
+            display_customer_payment()
         elif choice == 3:
             search_customer_registration()
         elif choice == 4:
@@ -525,12 +537,15 @@ def customer(username):
             # generates a unique number based on the UNIX timestamp
             transaction_id = int(time.time())
 
+            # transaction date
+            transaction_date = time.strftime("%d/%m/%Y")
+
             file_to_write = str(transaction_id) + " " + username + " " + str(total) + " " + str(
-                cart).strip("[]").replace("'", "").replace(",", "").replace(" ", "_")
+                cart).strip("[]").replace("'", "").replace(",", "").replace(" ", "_") + " " + transaction_date + "\n"
 
             with open(payments_file, 'a') as file:
                 # write transaction id, username, cart, total price
-                file.write(file_to_write + "\n")
+                file.write(file_to_write)
         elif modify_cart_prompt.lower() == 'e':
             return customer(username)
         return customer(username)
