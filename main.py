@@ -10,6 +10,13 @@ events_file = working_path + "/data/events.txt"
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
+# descriptios for events
+description = ['Wedding planning inclusive of emcee and flower bouquet. RM900',
+               'Concert ticketing planning with small pantry and welcoming drinks. RM20',
+               'Talent shows planning with judges and trophy. RM500',
+               'Seminars planning with motivational speaker and lecturer. RM800',
+               'Brand Activation campaign with red lion and ribbon cutting cerermony. RM1500']
+
 # clear screen function
 
 
@@ -340,28 +347,14 @@ def customer():
     print("4. Exit ")
 
     def selection():
-        selection = int(input("The number of events wanting to checkout: "))
-        if selection == 1:
-            display_categories()
-            cart = int(input("Choose the events to checkout: "))
-        elif selection == 2:
-            display_categories()
-            num1 = int(input())
-            num2 = int(input())
-
-        elif selection == 3:
-            display_categories()
-            num1 = int(input())
-            num2 =
-            num3 =
-        cart = int(input("Choose the events to checkout: "))
+        selection = int(input("Choose the events to checkout: "))
 
     def cart():
 
-    def checkout():
-        payment = int(input("Please select checkout method: "))
-        print("1. E-wallet")
-        print("2. Bank transfer")
+        def checkout():
+            payment = int(input("Please select checkout method: "))
+            print("1. E-wallet")
+            print("2. Bank transfer")
 
     try:
         options = int(input("Choice: "))
@@ -369,8 +362,8 @@ def customer():
             display_categories()
             return
             event_prompt()
-        # elif options == 2:
-            # event_prompt()
+        elif options == 2:
+            event_prompt()
         elif options == 3:
             cart()
         elif options == 4:
