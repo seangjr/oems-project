@@ -494,39 +494,39 @@ def customer(username):
             # check if input exists in the valid events list
             if cart_prompt not in valid_events_list and cart_prompt.lower() != 'e':
                 print("Event does not exist!")
+                return cart_function()
             elif cart_prompt.lower() == 'e':
                 exited = True
+                return customer(username)
 
             # check if event is already in cart
             if cart_prompt in cart:
                 print("Event already in cart!")
                 return cart_function()
-            else:
-                cart.append(cart_prompt) if cart_prompt.lower() != 'e' else ""
 
-        # add price of events in cart to price list
-        # checks for event in cart and index match
-        for event in cart:
-            # read for the price
-            with open(events_file, 'r') as file:
-                for line in file:
-                    event_details = line.split()
-                    # read details from events.txt
-                    event_index = event_details[0]
-                    event_price = event_details[6]
-                    if event_index == event:
-                        price_list.append(event_price)
+            cart.append(cart_prompt)
 
-        print(cart, price_list)
-        time.sleep(2)
+            # add price of events in cart to price list
+            # checks for event in cart and index match
+            for event in cart:
+                # read for the price
+                with open(events_file, 'r') as file:
+                    for line in file:
+                        event_details = line.split()
+                        # read details from events.txt
+                        event_index = event_details[0]
+                        event_price = event_details[6]
+                        if event_index == event:
+                            price_list.append(event_price)
+
         return customer(username)
 
     def checkout():
 
         clear_screen()
+
         # print out events in cart with corresponding name
         # read from events file
-
         def events_in_cart():
             for event in cart:
                 with open(events_file, 'r') as file:
@@ -537,8 +537,8 @@ def customer(username):
                         if event_index == event:
                             print(
                                 f"Event no. {event}, {event_name.replace('_', ' ')}")
-        # returns total price of events in cart
 
+        # returns total price of events in cart
         def total_price_cart():
             total = 0
             for price in price_list:
@@ -561,8 +561,9 @@ def customer(username):
             print("Current events in cart: ")
             events_in_cart()
 
-            remove_item_prompt = int(
-                input("Enter event number to remove from cart: "))
+            remove_item_prompt = input(
+                "Enter event number to remove from cart: ")
+
             if remove_item_prompt not in cart:
                 return
 
@@ -579,6 +580,8 @@ def customer(username):
             print("New events in cart: ")
             events_in_cart()
             print(f"Total price: {total}RM")
+
+            time.sleep(2)
 
             return customer(username)
         elif modify_cart_prompt.lower() == 'c':
@@ -629,7 +632,9 @@ def customer(username):
         elif options == 3:
             checkout()
         elif options == 4:
-            print("Exiting...")
+            # clear cart for new user
+            cart.clear()
+            price_list.clear()
             clear_screen()
             return
     except ValueError:
