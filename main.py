@@ -10,6 +10,9 @@ events_file = working_path + "/data/events.txt"
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
+shoppingCart = []
+
+
 # clear screen function
 
 

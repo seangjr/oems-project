@@ -429,7 +429,7 @@ Begin
 
         Print("Account created")
         Call function clear_screen()
-        return main()
+        Return main()
     
     Function log_in()
         Declare username, password as string
@@ -453,12 +453,12 @@ Begin
                     Endif
                     Return
                 Endif
-
             Endfor
         Close filehandler
+
         Print("Invalid username or password.")
         Call function clear_screen()
-        return main()
+        Return log_in()
     Endfunction
 
     Function main()
