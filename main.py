@@ -319,6 +319,7 @@ def admin(username: str):
         def search_customer_payment():
             clear_screen()
             print("Search customer payment.")
+            number_of_events_going = 0
             # search customer payment based on search query and returns result if name contains search query or transaction id contains search query
             search_query = str(
                 input("Search query (input username or transaction ID): "))
@@ -330,11 +331,25 @@ def admin(username: str):
                     # split line by spacing
                     payment_details = line.split()
                     transaction_id = payment_details[0]
-                    user = payment_details[1]
+                    payment_username = payment_details[1]
+                    payment_total = payment_details[2]
+                    payment_date = payment_details[4]
 
-                    if user.startswith(search_query) or transaction_id.startswith(search_query):
+                    events = payment_details[3].replace("_", " ").split()
+                    while number_of_events_going < len(events):
+                        number_of_events_going += 1
+
+                    if payment_username.startswith(search_query) or transaction_id.startswith(search_query):
                         print(
-                            f"Transaction ID: {transaction_id}, Username: {user}")
+                            f"Transaction ID: {transaction_id}, Username: {payment_username}, Total: {payment_total}, Date of payment: {payment_date}\nEvent details:")
+                        for event in events:
+                            with open(events_file, 'r') as efile:
+                                for eline in efile:
+                                    if eline[:1] == event:
+                                        event_details = eline.split()
+                                        event_name = event_details[2]
+                                        print(
+                                            f"Event no. {event} → Name: {event_name.replace('_', ' ')}")
                     else:
                         print("No results from search query.")
 
