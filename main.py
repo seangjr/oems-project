@@ -10,15 +10,13 @@ events_file = working_path + "/data/events.txt"
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
-<< << << < HEAD
-# descriptios for events
-description = ['Wedding planning inclusive of emcee and flower bouquet. RM900',
-               'Concert ticketing planning with small pantry and welcoming drinks. RM20',
-               'Talent shows planning with judges and trophy. RM500',
-               'Seminars planning with motivational speaker and lecturer. RM800',
-               'Brand Activation campaign with red lion and ribbon cutting cerermony. RM1500']
-== == == =
->>>>>> > ce44bb2bf07152231db58c8e3394d19acfccc0e1
+
+# descriptions for events
+description = ['Wedding planning inclusive of emcee and flower bouquet.',
+               'Concert ticketing planning with small pantry and welcoming drinks.',
+               'Talent shows planning with judges and trophy.',
+               'Seminars planning with motivational speaker and lecturer.',
+               'Brand Activation campaign with red lion and ribbon cutting cerermony.']
 
 # clear screen function
 
