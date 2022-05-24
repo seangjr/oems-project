@@ -347,12 +347,15 @@ def customer(username):
 
         selection_choice = int(input("Select an option to view details: "))
         if selection_choice == 1:
+            # description of categories
             print("Weddings - ")
             print("Concerts - ")
             print("Talent Shows - ")
             print("Seminars - ")
             print("Brand Activation - ")
         elif selection_choice == 2:
+            # details of events
+            # if event not found in category, display message
             event_found = event_list()
             print("No event found in this category!") if not event_found else ""
 
