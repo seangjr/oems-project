@@ -10,12 +10,15 @@ events_file = working_path + "/data/events.txt"
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
+<<<<<<< HEAD
 # descriptios for events
 description = ['Wedding planning inclusive of emcee and flower bouquet. RM900',
                'Concert ticketing planning with small pantry and welcoming drinks. RM20',
                'Talent shows planning with judges and trophy. RM500',
                'Seminars planning with motivational speaker and lecturer. RM800',
                'Brand Activation campaign with red lion and ribbon cutting cerermony. RM1500']
+=======
+>>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
 
 # clear screen function
 
@@ -211,7 +214,7 @@ def admin(username: str):
         clear_screen()
         print("Displaying all events...")
         event_found = event_list()
-        print("No event found in this cateory!") if not event_found else ""
+        print("No event found in this category!") if not event_found else ""
         choice = input("Type 'e' to exit when ready: ")
         # exit if user types 'e'
         if choice.lower() != "e":
@@ -319,7 +322,7 @@ def admin(username: str):
         time.sleep(1)
         clear_screen()
         admin(username)
-    main()
+    return admin(username)
 
 
 def view_events():
@@ -339,43 +342,84 @@ def view_events():
     time.sleep(1)
 
 
-def customer():
-    print("Welcome! Select options below: ")
-    print("1. Event Category ")
-    print("2. Events")
-    print("3. Checkout")
-    print("4. Exit ")
+def customer(username):
+    clear_screen()
+    print(f"Welcome {username}! Select options below: ")
+    print("1. View event details.")
+    print("2. Add events to cart.")
+    print("3. Checkout.")
+    print("4. Exit.")
 
     def selection():
+<<<<<<< HEAD
         selection = int(input("Choose the events to checkout: "))
+=======
+        print("1. Event categories")
+        print("2. Event details")
+
+        selection_choice = int(input("Select an option to view details: "))
+        if selection_choice == 1:
+            # description of categories
+            print("Weddings - ")
+            print("Concerts - ")
+            print("Talent Shows - ")
+            print("Seminars - ")
+            print("Brand Activation - ")
+        elif selection_choice == 2:
+            # details of events
+            # if event not found in category, display message
+            event_found = event_list()
+            print("No event found in this category!") if not event_found else ""
+
+            choice = input("Type 'e' to exit when done: ")
+            if choice.lower() != "e":
+                print("Invalid input!")
+                time.sleep(2)
+                return selection()
+            else:
+                return customer(username)
+>>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
 
     def cart():
+        print("Cart")
 
+<<<<<<< HEAD
         def checkout():
             payment = int(input("Please select checkout method: "))
             print("1. E-wallet")
             print("2. Bank transfer")
+=======
+    def checkout():
+        print("1. E-wallet")
+        print("2. Bank transfer")
+        payment = int(input("Please select checkout method: "))
+>>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
 
     try:
         options = int(input("Choice: "))
         if options == 1:
+<<<<<<< HEAD
             display_categories()
             return
             event_prompt()
         elif options == 2:
             event_prompt()
         elif options == 3:
+=======
+            selection()
+        elif options == 2:
+>>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
             cart()
+        elif options == 3:
+            checkout()
         elif options == 4:
             print("Exiting...")
-            time.sleep(1)
             clear_screen()
             return
     except ValueError:
         print("Invalid choice.")
-        time.sleep(1)
-        customer()
-    customer()
+        return customer(username)
+    return customer(username)
 
 
 def sign_up():
@@ -434,7 +478,7 @@ def log_in():
                     admin(username)
                 else:
                     # else if user is customer call the customer function
-                    customer()
+                    customer(username)
                 return
 
     print("Invalid username or password.")
