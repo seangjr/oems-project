@@ -10,8 +10,6 @@ events_file = working_path + "/data/events.txt"
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
-shoppingCart = []
-
 
 # clear screen function
 
@@ -207,7 +205,7 @@ def admin(username: str):
         clear_screen()
         print("Displaying all events...")
         event_found = event_list()
-        print("No event found in this cateory!") if not event_found else ""
+        print("No event found in this category!") if not event_found else ""
         choice = input("Type 'e' to exit when ready: ")
         # exit if user types 'e'
         if choice.lower() != "e":
@@ -315,7 +313,7 @@ def admin(username: str):
         time.sleep(1)
         clear_screen()
         admin(username)
-    main()
+    return admin(username)
 
 
 def view_events():
@@ -335,57 +333,61 @@ def view_events():
     time.sleep(1)
 
 
-def customer():
-    print("Welcome! Select options below: ")
-    print("1. Event Category ")
-    print("2. Events")
-    print("3. Checkout")
-    print("4. Exit ")
+def customer(username):
+    clear_screen()
+    print(f"Welcome {username}! Select options below: ")
+    print("1. View event details.")
+    print("2. Add events to cart.")
+    print("3. Checkout.")
+    print("4. Exit.")
 
     def selection():
-        selection = int(input("The number of events wanting to checkout: "))
-        if selection == 1:
-            display_categories()
-            cart = int(input("Choose the events to checkout: "))
-        elif selection == 2:
-            display_categories()
-            num1 = int(input())
-            num2 = int(input())
+        print("1. Event categories")
+        print("2. Event details")
 
-        elif selection == 3:
-            display_categories()
-            num1 = int(input())
-            num2 =
-            num3 =
-        cart = int(input("Choose the events to checkout: "))
+        selection_choice = int(input("Select an option to view details: "))
+        if selection_choice == 1:
+            print("Weddings - ")
+            print("Concerts - ")
+            print("Talent Shows - ")
+            print("Seminars - ")
+            print("Brand Activation - ")
+        elif selection_choice == 2:
+            event_found = event_list()
+            print("No event found in this category!") if not event_found else ""
+
+            choice = input("Type 'e' to exit when done: ")
+            if choice.lower() != "e":
+                print("Invalid input!")
+                time.sleep(2)
+                return selection()
+            else:
+                return customer(username)
 
     def cart():
+        print("Cart")
 
     def checkout():
-        payment = int(input("Please select checkout method: "))
         print("1. E-wallet")
         print("2. Bank transfer")
+        payment = int(input("Please select checkout method: "))
 
     try:
         options = int(input("Choice: "))
         if options == 1:
-            display_categories()
-            return
-            event_prompt()
-        # elif options == 2:
-            # event_prompt()
-        elif options == 3:
+            selection()
+        elif options == 2:
             cart()
+        elif options == 3:
+            checkout()
         elif options == 4:
             print("Exiting...")
-            time.sleep(1)
             clear_screen()
             return
     except ValueError:
         print("Invalid choice.")
-        time.sleep(1)
-        customer()
-    customer()
+        return customer(username)
+    return customer(username)
 
 
 def sign_up():
@@ -444,7 +446,7 @@ def log_in():
                     admin(username)
                 else:
                     # else if user is customer call the customer function
-                    customer()
+                    customer(username)
                 return
 
     print("Invalid username or password.")
