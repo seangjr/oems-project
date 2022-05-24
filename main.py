@@ -12,7 +12,14 @@ categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
 
+# initialise list for cart
+cart = []
+# list for price of events in cart -> to be calculated for total price
+price_list = []
+
 # clear screen function
+
+
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -215,6 +222,7 @@ def admin(username: str):
             return admin(username)
 
     def customer_details():
+
         def display_customer_registration():
             clear_screen()
             # display customer registration details
@@ -238,6 +246,17 @@ def admin(username: str):
                 return display_customer_registration()
             else:
                 return admin(username)
+
+        def display_customer_payment():
+            clear_screen()
+            # display customer payment details
+            with open(payments_file, 'r') as file:
+                for line in file:
+                    # split line by space
+                    payment_details = line.split()
+                    transaction_id = payment_details[0]
+                    payment_username = payment_details[1]
+                    payment_total = payment_details[2]
 
         def search_customer_registration():
             clear_screen()
@@ -333,10 +352,6 @@ def view_events():
 
 
 def customer(username):
-    # initialise list for cart
-    cart = []
-    # list for price of events in cart -> to be calculated for total price
-    price_list = []
 
     clear_screen()
     print(f"Welcome {username}! Select options below: ")
@@ -370,9 +385,10 @@ def customer(username):
                 time.sleep(2)
                 return selection()
             else:
+                time.sleep(2)
                 return customer(username)
-
     # allow cart to accept multiple events
+
     def cart_function():
         # this list will check for the input if it is a valid event number to add to cart
         valid_events_list = []
@@ -401,15 +417,19 @@ def customer(username):
             # prompt user to enter which event to add to cart
             cart_prompt = input(
                 "Enter event number to add to cart or type 'e' to exit: ")
-            if cart_prompt.lower() == 'e':
-                exited = True
-                return customer(username)
 
             # check if input exists in the valid events list
-            if cart_prompt not in valid_events_list:
+            if cart_prompt not in valid_events_list and cart_prompt.lower() != 'e':
                 print("Event does not exist!")
+            elif cart_prompt.lower() == 'e':
+                exited = True
+
+            # check if event is already in cart
+            if cart_prompt in cart:
+                print("Event already in cart!")
+                return cart_function()
             else:
-                cart.append(cart_prompt)
+                cart.append(cart_prompt) if cart_prompt.lower() != 'e' else ""
 
         # add price of events in cart to price list
         # checks for event in cart and index match
@@ -418,12 +438,18 @@ def customer(username):
             with open(events_file, 'r') as file:
                 for line in file:
                     event_details = line.split()
+                    # read details from events.txt
                     event_index = event_details[0]
                     event_price = event_details[6]
                     if event_index == event:
                         price_list.append(event_price)
 
+        print(cart, price_list)
+        time.sleep(2)
+        return customer(username)
+
     def checkout():
+
         clear_screen()
         # print out events in cart with corresponding name
         # read from events file
@@ -438,6 +464,7 @@ def customer(username):
                         if event_index == event:
                             print(
                                 f"Event no. {event}, {event_name.replace('_', ' ')}")
+        # returns total price of events in cart
 
         def total_price_cart():
             total = 0
@@ -448,14 +475,14 @@ def customer(username):
         total = total_price_cart()
 
         # calculate total price
-        print("Please review cart below: ")
+        print("Please review cart below!")
         print("Events you are going for: ")
         events_in_cart()
         print(f"Total price: {total}RM")
 
         # allow user to modify their cart or just checkout
         modify_cart_prompt = input(
-            "Would you like to modify your cart? Type 'm' to modify cart or 'c' to checkout: ")
+            "Would you like to modify your cart? Type 'm' to modify cart , 'c' to checkout, or 'e' to exit: ")
 
         if modify_cart_prompt.lower() == 'm':
             print("Current events in cart: ")
@@ -498,10 +525,15 @@ def customer(username):
             # generates a unique number based on the UNIX timestamp
             transaction_id = int(time.time())
 
+            file_to_write = str(transaction_id) + " " + username + " " + str(total) + " " + str(
+                cart).strip("[]").replace("'", "").replace(",", "").replace(" ", "_")
+
             with open(payments_file, 'a') as file:
                 # write transaction id, username, cart, total price
-                file.write(
-                    f"{transaction_id} {username} {total} {cart.strip('[]').replace(',', '').replace(' ', '_')}\n")
+                file.write(file_to_write + "\n")
+        elif modify_cart_prompt.lower() == 'e':
+            return customer(username)
+        return customer(username)
     try:
         options = int(input("Choice: "))
         if options == 1:
@@ -517,7 +549,6 @@ def customer(username):
     except ValueError:
         print("Invalid choice.")
         return customer(username)
-    return customer(username)
 
 
 def sign_up():
