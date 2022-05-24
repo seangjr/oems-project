@@ -10,15 +10,15 @@ events_file = working_path + "/data/events.txt"
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
-<<<<<<< HEAD
+<< << << < HEAD
 # descriptios for events
 description = ['Wedding planning inclusive of emcee and flower bouquet. RM900',
                'Concert ticketing planning with small pantry and welcoming drinks. RM20',
                'Talent shows planning with judges and trophy. RM500',
                'Seminars planning with motivational speaker and lecturer. RM800',
                'Brand Activation campaign with red lion and ribbon cutting cerermony. RM1500']
-=======
->>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
+== == == =
+>>>>>> > ce44bb2bf07152231db58c8e3394d19acfccc0e1
 
 # clear screen function
 
@@ -351,9 +351,6 @@ def customer(username):
     print("4. Exit.")
 
     def selection():
-<<<<<<< HEAD
-        selection = int(input("Choose the events to checkout: "))
-=======
         print("1. Event categories")
         print("2. Event details")
 
@@ -378,37 +375,20 @@ def customer(username):
                 return selection()
             else:
                 return customer(username)
->>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
 
     def cart():
         print("Cart")
 
-<<<<<<< HEAD
-        def checkout():
-            payment = int(input("Please select checkout method: "))
-            print("1. E-wallet")
-            print("2. Bank transfer")
-=======
     def checkout():
         print("1. E-wallet")
         print("2. Bank transfer")
         payment = int(input("Please select checkout method: "))
->>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
 
     try:
         options = int(input("Choice: "))
         if options == 1:
-<<<<<<< HEAD
-            display_categories()
-            return
-            event_prompt()
-        elif options == 2:
-            event_prompt()
-        elif options == 3:
-=======
             selection()
         elif options == 2:
->>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
             cart()
         elif options == 3:
             checkout()
