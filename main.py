@@ -249,18 +249,34 @@ def admin(username: str):
 
         def display_customer_payment():
             clear_screen()
+            # intialise number of events being paid for by user
+            number_of_events_going = 0
             # display customer payment details
-            with open(payments_file, 'r') as file:
-                for line in file:
+            with open(payments_file, 'r') as pfile:
+                for pline in pfile:
                     # split line by space
-                    payment_details = line.split()
+                    payment_details = pline.split()
                     transaction_id = payment_details[0]
                     payment_username = payment_details[1]
                     payment_total = payment_details[2]
-                    payment_date = payment_details[3]
+                    payment_date = payment_details[4]
+
+                    events = payment_details[3].replace("_", " ").split()
+                    while number_of_events_going < len(events):
+                        number_of_events_going += 1
 
                     print(
-                        f"Transaction ID: {transaction_id}, Username: {payment_username}, Total: {payment_total}, Date of payment: {payment_date}")
+                        f"Transaction ID: {transaction_id}, Username: {payment_username}, Total: {payment_total}, Date of payment: {payment_date}, Going for {number_of_events_going} events\nEvent details:")
+
+                    for event in events:
+                        with open(events_file, 'r') as efile:
+                            for eline in efile:
+                                if eline[:1] == event:
+                                    event_details = eline.split()
+                                    event_name = event_details[2]
+                                    print(
+                                        f"Event no. {event} → Name: {event_name.replace('_', ' ')}")
+
             # exit when 'e' is entered
             choice = input("Type 'e' to exit when ready: ")
             if choice.lower() != "e":
@@ -300,6 +316,28 @@ def admin(username: str):
             else:
                 admin(username)
 
+        def search_customer_payment():
+            clear_screen()
+            print("Search customer payment.")
+            # search customer payment based on search query and returns result if name contains search query or transaction id contains search query
+            search_query = str(
+                input("Search query (input username or transaction ID): "))
+
+            with open(payments_file, 'r') as file:
+                print(f"Searching for '{search_query}'...")
+
+                for line in file:
+                    # split line by spacing
+                    payment_details = line.split()
+                    transaction_id = payment_details[0]
+                    user = payment_details[1]
+
+                    if user.startswith(search_query) or transaction_id.startswith(search_query):
+                        print(
+                            f"Transaction ID: {transaction_id}, Username: {user}")
+                    else:
+                        print("No results from search query.")
+
         # customer details menu
         clear_screen()
         print("Customer details! Select an option below: \n1. Display all customer registration\n2. Display customer payment\n3. Search customer registration\n4. Search customer payment\n5. Back")
@@ -311,7 +349,7 @@ def admin(username: str):
         elif choice == 3:
             search_customer_registration()
         elif choice == 4:
-            print("4")
+            search_customer_payment()
         elif choice == 5:
             admin(username)
 
@@ -342,8 +380,7 @@ def admin(username: str):
         print("Error! Invalid value. Try again!")
         time.sleep(1)
         clear_screen()
-        admin(username)
-    return admin(username)
+        return admin(username)
 
 
 def view_events():
@@ -546,6 +583,13 @@ def customer(username):
             with open(payments_file, 'a') as file:
                 # write transaction id, username, cart, total price
                 file.write(file_to_write)
+
+            # print out transaction ID for customer to save
+            print(
+                f"Your transaction ID: {transaction_id}\nPlease copy this number and save it for future reference.")
+            input("Enter any character to exit: ")
+            return
+
         elif modify_cart_prompt.lower() == 'e':
             return customer(username)
         return customer(username)
