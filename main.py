@@ -342,6 +342,7 @@ def customer(username):
     print("4. Exit.")
 
     def selection():
+        clear_screen()
         print("1. Event categories")
         print("2. Event details")
 
@@ -367,8 +368,42 @@ def customer(username):
             else:
                 return customer(username)
 
+    # allow cart to accept multiple events
     def cart():
-        print("Cart")
+        # initialise list for cart
+        cart = []
+        # list for price of events in cart -> to be calculated for total price
+        price_list = []
+
+        with open(events_file, 'r') as file:
+            for line in file:
+                # if category matches, print event
+                # split line by space
+                event_details = line.split()
+                event_index = event_details[0]
+                event_category = event_details[1]
+                event_name = event_details[2]
+                event_date = event_details[3]
+                event_time = event_details[4]
+                event_venue = event_details[5]
+                event_price = event_details[6]
+                event_capacity = event_details[7]
+
+                print(f"Event no. {event_index} → Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
+
+            # if exited is True, then stop the loop
+            exited = False
+            while exited == False:
+                cart_prompt = input(
+                    "Enter an event number to add to cart or type 'e' to exit: ")
+
+                if cart_prompt.lowercase() == 'e':
+                    exited = True
+                    break
+
+                # if event number is valid, add to cart
+
+        clear_screen()
 
     def checkout():
         print("1. E-wallet")
