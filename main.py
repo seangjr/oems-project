@@ -334,6 +334,11 @@ def view_events():
 
 
 def customer(username):
+    # initialise list for cart
+    cart = []
+    # list for price of events in cart -> to be calculated for total price
+    price_list = []
+
     clear_screen()
     print(f"Welcome {username}! Select options below: ")
     print("1. View event details.")
@@ -369,11 +374,9 @@ def customer(username):
                 return customer(username)
 
     # allow cart to accept multiple events
-    def cart():
-        # initialise list for cart
-        cart = []
-        # list for price of events in cart -> to be calculated for total price
-        price_list = []
+    def cart_function():
+        # this list will check for the input if it is a valid event number to add to cart
+        valid_events_list = []
 
         with open(events_file, 'r') as file:
             for line in file:
@@ -391,31 +394,67 @@ def customer(username):
 
                 print(f"Event no. {event_index} → Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
 
-            # if exited is True, then stop the loop
-            exited = False
-            while exited == False:
-                cart_prompt = input(
-                    "Enter an event number to add to cart or type 'e' to exit: ")
+                valid_events_list.append(event_index)
 
-                if cart_prompt.lowercase() == 'e':
-                    exited = True
-                    break
+        # add event to cart
+        exited = False
+        while exited == False:
+            # prompt user to enter which event to add to cart
+            cart_prompt = input(
+                "Enter event number to add to cart or type 'e' to exit: ")
+            if cart_prompt.lower() == 'e':
+                exited = True
+                return customer(username)
 
-                # if event number is valid, add to cart
+            # check if input exists in the valid events list
+            if cart_prompt not in valid_events_list:
+                print("Event does not exist!")
+            else:
+                cart.append(cart_prompt)
 
-        clear_screen()
+        # add price of events in cart to price list
+        # checks for event in cart and index match
+        for event in cart:
+            # read for the price
+            with open(events_file, 'r') as file:
+                for line in file:
+                    event_details = line.split()
+                    event_index = event_details[0]
+                    event_price = event_details[6]
+                    if event_index == event:
+                        price_list.append(event_price)
 
     def checkout():
-        print("1. E-wallet")
-        print("2. Bank transfer")
-        payment = int(input("Please select checkout method: "))
+        clear_screen()
+        print("Checking out... Please review cart below: ")
+        print("Events you are going for: ")
+        for event in cart:
+            with open(events_file, 'r') as file:
+                for line in file:
+                    event_details = line.split()
+                    event_index = event_details[0]
+                    event_name = event_details[2]
+                    if event_index == event:
+                        print(
+                            f"Event no. {event}, {event_name.replace('_', ' ')}")
+
+        # calculate total price
+        total = 0
+        for price in price_list:
+            total += price
+        print(f"Total price: {total}")
+
+        modify_cart_prompt = input(
+            "Would you like to modify your cart? Type 'm' to modify cart or 'c' to checkout: ")
+
+        if modify_cart_prompt.lower() == 'm':
 
     try:
         options = int(input("Choice: "))
         if options == 1:
             selection()
         elif options == 2:
-            cart()
+            cart_function()
         elif options == 3:
             checkout()
         elif options == 4:
