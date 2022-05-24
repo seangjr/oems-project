@@ -5,6 +5,7 @@ import time
 working_path = os.getcwd()
 users_file = working_path + "/data/users.txt"
 events_file = working_path + "/data/events.txt"
+payments_file = working_path + "/data/payments.txt"
 
 # categories for events
 categories = ['Weddings', 'Concerts',
@@ -426,29 +427,83 @@ def customer(username):
 
     def checkout():
         clear_screen()
-        print("Checking out... Please review cart below: ")
-        print("Events you are going for: ")
-        for event in cart:
-            with open(events_file, 'r') as file:
-                for line in file:
-                    event_details = line.split()
-                    event_index = event_details[0]
-                    event_name = event_details[2]
-                    if event_index == event:
-                        print(
-                            f"Event no. {event}, {event_name.replace('_', ' ')}")
+        # print out events in cart with corresponding name
+        # read from events file
+
+        def events_in_cart():
+            for event in cart:
+                with open(events_file, 'r') as file:
+                    for line in file:
+                        event_details = line.split()
+                        event_index = event_details[0]
+                        event_name = event_details[2]
+                        if event_index == event:
+                            print(
+                                f"Event no. {event}, {event_name.replace('_', ' ')}")
+
+        def total_price_cart():
+            total = 0
+            for price in price_list:
+                total += int(price)
+            return total
+
+        total = total_price_cart()
 
         # calculate total price
-        total = 0
-        for price in price_list:
-            total += price
-        print(f"Total price: {total}")
+        print("Please review cart below: ")
+        print("Events you are going for: ")
+        events_in_cart()
+        print(f"Total price: {total}RM")
 
+        # allow user to modify their cart or just checkout
         modify_cart_prompt = input(
             "Would you like to modify your cart? Type 'm' to modify cart or 'c' to checkout: ")
 
         if modify_cart_prompt.lower() == 'm':
+            print("Current events in cart: ")
+            events_in_cart()
 
+            remove_item_prompt = int(
+                input("Enter event number to remove from cart: "))
+            if remove_item_prompt not in cart:
+                return
+            # remove item from cart
+            cart.remove(remove_item_prompt)
+            with open(events_file, 'r') as file:
+                for line in file:
+                    event_details = line.split()
+                    event_index = event_details[0]
+                    # remove corresponding price of event from price list
+                    if event_index == remove_item_prompt:
+                        price_list.remove(event_details[6])
+            # print new cart
+            print("New events in cart: ")
+            events_in_cart()
+            print(f"Total price: {total}RM")
+        elif modify_cart_prompt.lower() == 'c':
+            print(
+                "Checking out...\n\nAvailable payment methods: \n1. Credit/Debit Card Payment\n2. Bank Transfer")
+            checkout_prompt = int(input("Select payment method: "))
+            if checkout_prompt == 1:
+                input("Enter name on card: ")
+                input("Enter card number: ")
+                input("Enter expiry date: ")
+                input("Enter CVV: ")
+                print("Payment successful!")
+            elif checkout_prompt == 2:
+                input("Enter bank name: ")
+                input("Enter account number: ")
+                print("Payment successful!")
+            else:
+                print("Invalid input!")
+
+            # generates a unique number based on the UNIX timestamp
+            transaction_id = int(time.time())
+
+            with open(payments_file, 'a') as file:
+                # write transaction id, username, cart, total price
+                file.write(
+                    f"{transaction_id} {username} {total} {cart.strip('[]').replace(',', '').replace(' ', '_')}\n")
     try:
         options = int(input("Choice: "))
         if options == 1:
