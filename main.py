@@ -565,6 +565,7 @@ def customer(username):
                 input("Enter event number to remove from cart: "))
             if remove_item_prompt not in cart:
                 return
+
             # remove item from cart
             cart.remove(remove_item_prompt)
             with open(events_file, 'r') as file:
@@ -578,6 +579,8 @@ def customer(username):
             print("New events in cart: ")
             events_in_cart()
             print(f"Total price: {total}RM")
+
+            return customer(username)
         elif modify_cart_prompt.lower() == 'c':
             print(
                 "Checking out...\n\nAvailable payment methods: \n1. Credit/Debit Card Payment\n2. Bank Transfer")
