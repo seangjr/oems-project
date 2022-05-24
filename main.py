@@ -13,8 +13,6 @@ categories = ['Weddings', 'Concerts',
 
 
 # clear screen function
-
-
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
