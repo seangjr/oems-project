@@ -11,6 +11,7 @@ events_file = working_path + "/data/events.txt"
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
+<<<<<<< HEAD
 # descriptios for events
 description = ['Wedding planning inclusive of emcee and flower bouquet. RM900',
                'Concert ticketing planning with small pantry and welcoming drinks. RM20',
@@ -20,6 +21,15 @@ description = ['Wedding planning inclusive of emcee and flower bouquet. RM900',
 
 # payment methods
 paymentmethod = ['E-wallet', 'Online transfer']
+=======
+
+# descriptions for events
+description = ['Wedding planning inclusive of emcee and flower bouquet.',
+               'Concert ticketing planning with small pantry and welcoming drinks.',
+               'Talent shows planning with judges and trophy.',
+               'Seminars planning with motivational speaker and lecturer.',
+               'Brand Activation campaign with red lion and ribbon cutting cerermony.']
+>>>>>>> 3d3e927b9232ca24c361f59fed71a94200305fc0
 
 # clear screen function
 
@@ -394,6 +404,7 @@ def customer(username):
 
     def confirmation():
         payment = int(input("Please select checkout method: "))
+<<<<<<< HEAD
         print(f"You have selected {payment} as your desired payment method")
         choice = str(input("Confirmation to proceed with payment? (y/n): "))
         if choice == "y" or choice == "Y":
@@ -402,6 +413,8 @@ def customer(username):
             return "-"
         with open(users_file, "a") as file:
             file.write(f"{username}{choice}")
+=======
+>>>>>>> 3d3e927b9232ca24c361f59fed71a94200305fc0
 
     try:
         options = int(input("Choice: "))
