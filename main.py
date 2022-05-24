@@ -564,6 +564,7 @@ def customer(username):
             remove_item_prompt = input(
                 "Enter event number to remove from cart: ")
 
+            # if item is not in cart, display message
             if remove_item_prompt not in cart:
                 return
 
@@ -588,12 +589,14 @@ def customer(username):
             print(
                 "Checking out...\n\nAvailable payment methods: \n1. Credit/Debit Card Payment\n2. Bank Transfer")
             checkout_prompt = int(input("Select payment method: "))
+            # credit card payment
             if checkout_prompt == 1:
                 input("Enter name on card: ")
                 input("Enter card number: ")
                 input("Enter expiry date: ")
                 input("Enter CVV: ")
                 print("Payment successful!")
+            # bank transfer
             elif checkout_prompt == 2:
                 input("Enter bank name: ")
                 input("Enter account number: ")
@@ -623,6 +626,7 @@ def customer(username):
         elif modify_cart_prompt.lower() == 'e':
             return customer(username)
         return customer(username)
+
     try:
         options = int(input("Choice: "))
         if options == 1:
