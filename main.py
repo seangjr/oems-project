@@ -11,6 +11,12 @@ payments_file = working_path + "/data/payments.txt"
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
+# descriptions for events
+description = ['Wedding planning inclusive of emcee and flower bouquet.',
+               'Concert ticketing planning with small pantry and welcoming drinks.',
+               'Talent shows planning with judges and trophy.',
+               'Seminars planning with motivational speaker and lecturer.',
+               'Brand Activation campaign with red lion and ribbon cutting cerermony.']
 
 # initialise list for cart
 cart = []
@@ -319,6 +325,10 @@ def admin(username: str):
         def search_customer_payment():
             clear_screen()
             print("Search customer payment.")
+            # not found variable used to check if there is a user found
+            payment_found = False
+
+            # initalise number of events going
             number_of_events_going = 0
             # search customer payment based on search query and returns result if name contains search query or transaction id contains search query
             search_query = str(
@@ -340,6 +350,7 @@ def admin(username: str):
                         number_of_events_going += 1
 
                     if payment_username.startswith(search_query) or transaction_id.startswith(search_query):
+                        payment_found = True
                         print(
                             f"Transaction ID: {transaction_id}, Username: {payment_username}, Total: {payment_total}, Date of payment: {payment_date}\nEvent details:")
                         for event in events:
@@ -350,8 +361,8 @@ def admin(username: str):
                                         event_name = event_details[2]
                                         print(
                                             f"Event no. {event} → Name: {event_name.replace('_', ' ')}")
-                    else:
-                        print("No results from search query.")
+            if payment_found == False:
+                print("NO results from search query.")
 
         # customer details menu
         clear_screen()
@@ -432,11 +443,9 @@ def customer(username):
         selection_choice = int(input("Select an option to view details: "))
         if selection_choice == 1:
             # description of categories
-            print("Weddings - ")
-            print("Concerts - ")
-            print("Talent Shows - ")
-            print("Seminars - ")
-            print("Brand Activation - ")
+            for item in description:
+                print(f"{description.index(item) + 1}. {item}")
+            return customer(username)
         elif selection_choice == 2:
             # details of events
             # if event not found in category, display message
