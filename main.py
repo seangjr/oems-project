@@ -1,5 +1,6 @@
 import os
 import time
+from unicodedata import name
 
 # constants
 working_path = os.getcwd()
@@ -10,15 +11,15 @@ events_file = working_path + "/data/events.txt"
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
-<<<<<<< HEAD
 # descriptios for events
 description = ['Wedding planning inclusive of emcee and flower bouquet. RM900',
                'Concert ticketing planning with small pantry and welcoming drinks. RM20',
                'Talent shows planning with judges and trophy. RM500',
                'Seminars planning with motivational speaker and lecturer. RM800',
                'Brand Activation campaign with red lion and ribbon cutting cerermony. RM1500']
-=======
->>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
+
+# payment methods
+paymentmethod = ['E-wallet', 'Online transfer']
 
 # clear screen function
 
@@ -351,21 +352,25 @@ def customer(username):
     print("4. Exit.")
 
     def selection():
-<<<<<<< HEAD
-        selection = int(input("Choose the events to checkout: "))
-=======
         print("1. Event categories")
         print("2. Event details")
+       # selection = int(input("Choose the events to checkout: "))
 
         selection_choice = int(input("Select an option to view details: "))
-        if selection_choice == 1:
+        if selection_choice == 2:
             # description of categories
-            print("Weddings - ")
-            print("Concerts - ")
-            print("Talent Shows - ")
-            print("Seminars - ")
-            print("Brand Activation - ")
-        elif selection_choice == 2:
+            print("Weddings - inclusive of emcee and flower bouquet. RM900")
+            print("Concerts - with small pantry and welcoming drinks. RM20")
+            print("Talent Shows - with judges and trophy. RM500")
+            print("Seminars - with professional motivational speaker and lecturer. RM800")
+            print(
+                "Brand Activation - with lion dance and ribbon cutting ceremony. RM1500")
+            choice = input("Type 'e' to exit when done: ")
+            if choice.lower() != "e":
+                print("Invalid input!")
+                time.sleep(1)
+                return(selection)
+        elif selection_choice == 1:
             # details of events
             # if event not found in category, display message
             event_found = event_list()
@@ -378,37 +383,31 @@ def customer(username):
                 return selection()
             else:
                 return customer(username)
->>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
 
     def cart():
         print("Cart")
 
-<<<<<<< HEAD
-        def checkout():
-            payment = int(input("Please select checkout method: "))
-            print("1. E-wallet")
-            print("2. Bank transfer")
-=======
     def checkout():
         print("1. E-wallet")
         print("2. Bank transfer")
+        confirmation()
+
+    def confirmation():
         payment = int(input("Please select checkout method: "))
->>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
+        print(f"You have selected {payment} as your desired payment method")
+        choice = str(input("Confirmation to proceed with payment? (y/n): "))
+        if choice == "y" or choice == "Y":
+            return "Booking confirmed"
+        elif choice == "n" or choice == "N":
+            return "-"
+        with open(users_file, "a") as file:
+            file.write(f"{username}{choice}")
 
     try:
         options = int(input("Choice: "))
         if options == 1:
-<<<<<<< HEAD
-            display_categories()
-            return
-            event_prompt()
-        elif options == 2:
-            event_prompt()
-        elif options == 3:
-=======
             selection()
         elif options == 2:
->>>>>>> ce44bb2bf07152231db58c8e3394d19acfccc0e1
             cart()
         elif options == 3:
             checkout()
