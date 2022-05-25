@@ -299,6 +299,7 @@ Begin
             Function display_customer_payment
                 Declare payment_date, transaction_id, payment_username, payment_total, events, choice as string
                 Declare number_of_events_going as integer
+                Declare payment_details, event_details as array of string
 
                 number_of_events_going = 0
 
@@ -347,7 +348,9 @@ Begin
                 Endif
 
             Function search_customer_registration()
-                Declare search_username, choice as string
+                Declare search_username, choice, user, permission, registration_date as string
+                Declare user_details as array of string
+
                 Call function clear_screen()
                 Print("Search customer registration.")
                 Print("Search username: ")
@@ -375,7 +378,70 @@ Begin
                 Endif
             Endfunction
 
-            Call clear_screen()
+            Function search_customer_payment()
+                Declare payment_found as boolean
+                Declare search_query, choice as string
+                Declare number_of_events_going as integer
+                Declare event_details, payment_details as array of string
+                Call function clear_screen()
+                Print("Search customer payment.")
+
+                payment_found = False
+                number_of_events_going = 0
+
+                Print(
+                    "Search query (input username or transaction ID): ")
+                Get search_query
+
+                Open payments_file in READ mode
+                    Read lines of file into pfilehandler
+                    For pline in pfilehandler
+                        Split pline into payment_details using " " as delimiter
+                        payment_details = pline.split()
+                        transaction_id = payment_details[0]
+                        payment_username = payment_details[1]
+                        payment_total = payment_details[2]
+                        payment_date = payment_details[4]
+
+                        Split payment_details[3] with "_" replaced as " " into events
+                        While number_of_events_going is less than length of events then
+                            number_of_events_going = number_of_events_going + 1
+                        Endwhile
+
+                        If payment_username is search_query or transaction_id is search_query then
+                            payment_found = True
+                            Print("Transaction ID: ", transaction_id, ", Username: ", payment_username, ", Total: ", payment_total, ", Date of payment: ", payment_date, ", Going for ", number_of_events_going, "events")
+                            Print("Event details: ")
+
+                            For event in events
+                                Open events_file in READ mode
+                                    Read lines of file into efilehandler
+                                    For eline in efilehandler
+                                        If first char of eline is equal to event then
+                                            Split eline into event_details using " " as delimiter
+                                            event_name = event_details[2]
+                                            Print("Event no.", event, "→ Name: ", event_name with "_" replaced as " ")
+                                        Endif
+                                    Endfor
+                                Close efilehandler
+                            Endfor
+                        Endif
+                    Endfor
+                Close pfilehandler
+                If payment_found is False then
+                    Print("No results from search query.")
+                Endif
+
+                Print("Type 'e' to exit when ready: ")
+                Get Choice
+                If lowercase of choice is not 'e' then
+                    Print("Invalid input!")
+                    Return search_customer_payment()
+                Else
+                    Return admin(username)
+            Endfunction
+
+            Call function clear_screen()
             Print("Customer details! Select an option below: ")
             Print("1. Display all customer registration")
             Print("2. Display customer payment")
@@ -386,13 +452,13 @@ Begin
             Print("Choice: ")
             Get choice
             If choice is 1 then
-                Call display_customer_registration()
+                Call function display_customer_registration()
             Elseif choice is 2 then
-                Call display_customer_payment()
+                Call function display_customer_payment()
             Elseif choice is 3 then
-                Call search_customer_registration()
+                Call function search_customer_registration()
             Elseif choice is 4 then
-                Call search_customer_payment()
+                Call function search_customer_payment()
             Elseif choice is 5 then
                 Return admin(username)
             Endif

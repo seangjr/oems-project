@@ -325,7 +325,7 @@ def admin(username: str):
             if choice.lower() != "e":
                 print("Invalid input!")
                 time.sleep(2)
-                search_customer_registration()
+                return search_customer_registration()
             else:
                 admin(username)
 
@@ -341,12 +341,12 @@ def admin(username: str):
             search_query = str(
                 input("Search query (input username or transaction ID): "))
 
-            with open(payments_file, 'r') as file:
+            with open(payments_file, 'r') as pfile:
                 print(f"Searching for '{search_query}'...")
 
-                for line in file:
+                for pline in pfile:
                     # split line by spacing
-                    payment_details = line.split()
+                    payment_details = pline.split()
                     transaction_id = payment_details[0]
                     payment_username = payment_details[1]
                     payment_total = payment_details[2]
