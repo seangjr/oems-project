@@ -54,7 +54,7 @@ Begin
         Call function display_categories()
 
         Print("Event Category: ")
-        Get category = event_prompt()
+        event_prompt(Get category)
 
         Open events_file in READ mode
             Read lines of file into filehandler
@@ -70,7 +70,9 @@ Begin
                 event_capacity = event_details[7]
                 If event_category is category then
                     found = True 
-                    Print("Event no.", event_index, "→ Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price: ", event_price, "Capacity: ", event_capacity)
+                    Print(
+                        "Event no.", event_index, "→ Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price (RM): ", event_price, "Capacity: ", event_capacity
+                    )
             Endfor
         Close filehandler
         return found
@@ -136,13 +138,11 @@ Begin
             Declare event_to_modify, choice as integer
             Declare filedata, modified_filedata as array of string
             Declare temp_line, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity, new_category, new_name, new_date, new_time, new_venue, new_price, new_capacity as string
+            Declare event_found as boolean
 
             Call function clear_screen()
             Print("List of events... choose a category to dislay an event!")
-            Call function event_list()
-            Print("Modify event. Please enter the event number to modify: ")
-            Print("Event number: )
-            Get event_to_modify
+            event_found = event_list()
 
             Open events_file in READ mode
                 Read lines of file into filehandler
@@ -151,108 +151,116 @@ Begin
 
             For line in filedata:
                 temp_line = line
-                If first char of line is event_to_modify then
-                    Split line into event_details using " " as delimiter
-                    event_index = event_details[0]
-                    event_category = event_details[1]
-                    event_name = event_details[2]
-                    event_date = event_details[3]
-                    event_time = event_details[4]
-                    event_venue = event_details[5]
-                    event_price = event_details[6]
-                    event_capacity = event_details[7]
+                If event_found is True then
+                    Print("Modify event. Please enter the event number to modify: ")
+                    Print("Event number: )
+                    Get event_to_modify
 
-                    Print("Event no. ", event_index, "→ Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price: ", event_price, "Capacity: ", event_capacity)
+                    If first char of line is event_to_modify then
+                        Split line into event_details using " " as delimiter
+                        event_index = event_details[0]
+                        event_category = event_details[1]
+                        event_name = event_details[2]
+                        event_date = event_details[3]
+                        event_time = event_details[4]
+                        event_venue = event_details[5]
+                        event_price = event_details[6]
+                        event_capacity = event_details[7]
 
-                    Print("Please enter the field you want to modify: ")
-                    Print("1. Category")
-                    Print("2. Name")
-                    Print("3. Date")
-                    Print("4. Time")
-                    Print("5. Venue")
-                    Print("6. Price")
-                    Print("7. Capacity")
-                    Print("8. Delete line")
-                    Print("9. Back")
+                        Print("Event no. ", event_index, "→ Category: ", event_category, "Name: ", event_name with '_' replaced as ' ', "Date: ", event_date, "Time: ", event_time, "Venue: ", event_venue with '_' replaced as ' ', "Price: ", event_price, "Capacity: ", event_capacity)
 
-                    Print("Choice: ")
-                    Get choice
+                        Print("Please enter the field you want to modify: ")
+                        Print("1. Category")
+                        Print("2. Name")
+                        Print("3. Date")
+                        Print("4. Time")
+                        Print("5. Venue")
+                        Print("6. Price")
+                        Print("7. Capacity")
+                        Print("8. Delete line")
+                        Print("9. Back")
 
-                    If choice is 1 then
-                        Call function display_categories()
-                        Print("Event Category: ")
-                        event_prompt(Get new_category)
-                        event_category = new_category
-                    Elsef choice is 2 then
-                        Print("Event Name: ")
-                        event_prompt(Get new_name)
-                        event_name = new_name
-                    Elseif choice is 3 then
-                        Print("Event Date: ")
-                        event_prompt(Get new_date)
-                        event_date = new_date
-                    Elseif choice is 4 then
-                        Print("Event Time: ")
-                        event_prompt(Get new_time)
-                        event_time = new_time
-                    Elseif choice is 5 then
-                        Print("Event Venue: ")
-                        event_prompt(Get new_venue)
-                    Elseif choice is 6 then
-                        Print("Event Price: ")
-                        event_prompt(Get new_price)
-                        event_price = new_price
-                    Elseif choice is 7 then
-                        Print("Event Capacity: ")
-                        event_prompt(Get new_capacity)
-                        event_capacity = new_capacity
-                    Elseif choice is 8 then
-                        line = ""
-                    Elseif choice is 9 then
+                        Print("Choice: ")
+                        Get choice
+
+                        If choice is 1 then
+                            Call function display_categories()
+                            Print("Event Category: ")
+                            event_category = event_prompt(Get new_category)
+                        Elsef choice is 2 then
+                            Print("Event Name: ")
+                            event_name = event_prompt(Get new_name)
+                        Elseif choice is 3 then
+                            Print("Event Date: ")
+                            event_date = event_prompt(Get new_date)
+                        Elseif choice is 4 then
+                            Print("Event Time: ")
+                            event_time = event_prompt(Get new_time)
+                        Elseif choice is 5 then
+                            Print("Event Venue: ")
+                            event_venue = event_prompt(Get new_venue)
+                        Elseif choice is 6 then
+                            Print("Event Price: ")
+                            event_price = event_prompt(Get new_price)
+                        Elseif choice is 7 then
+                            Print("Event Capacity: ")
+                            event_capacity = event_prompt(Get new_capacity)
+                        Elseif choice is 8 then
+                            line = ""
+                        Elseif choice is 9 then
+                            Return admin(username)
+                        Endif
+
+                        If choice is not 1 to 9 then
+                            Print("Invalid input. Try again!")
+                            Return admin(username)
+                        Endif
+
+                        For item in filedata
+                            If item is temp_line then
+                                item = item with temp_line replaced as line
+                            Endif
+                        Endfor
+
+                        modified_filedata = []
+                        For strings in filedata
+                            If strings is not empty then
+                                Append strings to modified_filedata
+                            Endif
+                        Endfor
+
+                        For item in modified_filedata
+                            item = item with first char replaced as index of item + 1
+                        Endfor
+
+                        Open events_file in WRITE mode
+                            Write lines of modified_filedata to filehandler
+                        Close filehandler
+
+                        Print("Event modified.")
                         Return admin(username)
                     Endif
-
-                    If choice is not 1 to 8 then
-                        Print("Invalid input. Try again!")
-                        return admin(username)
-                    Endif
-
-                    For item in filedata
-                        If item is temp_line then
-                            item = item with temp_line replaced as line
-                        Endif
-                    Endfor
-
-                    modified_filedata = []
-                    For strings in filedata
-                        If strings is not empty then
-                            Append strings to modified_filedata
-                        Endif
-                    Endfor
-
-                    For item in modified_filedata
-                        item = item with first char replaced as index of item + 1
-                    Endfor
-
-                    Open events_file in WRITE mode
-                        Write lines of modified_filedata to filehandler
-                    Close filehandler
-
-                    Print("Event modified.")
-                    Call function admin(username)
-                Endif
-            Endfor
+                Endfor
+            Endif
+            Print("No event found!")
         Endfunction
 
         Function display_event()
             Declare choice as string
+            Declare event_found as boolean
+
             Call function clear_screen()
             Print("Displaying all events...")
-            Call function event_list()
+            event_found = event_list()
+            If event_found is False then
+                Print("No event found in this category!")
+            Endif
+
             Print("Type 'e' to exit when ready: ")
             If lowercase of choice is not 'e' then
                 Print("Invalid input!")
-                return display_event()
+                Delay for 2 seconds
+                Return display_event()
             Else
                 Return admin(username)
             Endif
@@ -262,7 +270,7 @@ Begin
             Declare choice as integer
 
             Function display_customer_registration()
-                Declare user, permission registration_date, choice as string
+                Declare user, permission, registration_date, choice as string
 
                 Call function clear_screen()
                 Open users_file in READ mode
@@ -282,11 +290,61 @@ Begin
                 Get Choice
                 If lowercase of choice is not 'e' then
                     Print("Invalid input!")
-                    return display_customer_registration()
+                    Return display_customer_registration()
                 Else
                     Return admin(username)
                 Endif
             Endfunction
+
+            Function display_customer_payment
+                Declare payment_date, transaction_id, payment_username, payment_total, events, choice as string
+                Declare number_of_events_going as integer
+
+                number_of_events_going = 0
+
+                Call function clear_screen()
+
+                Open users_file in READ mode
+                    Read lines of file into pfilehandler
+                    For pline in pfilehandler
+                        Split pline into payment_details using " " as delimiter
+                        payment_details = pline.split()
+                        transaction_id = payment_details[0]
+                        payment_username = payment_details[1]
+                        payment_total = payment_details[2]
+                        payment_date = payment_details[4]
+
+                        Split payment_details[3] with "_" replaced as " " into events
+                        While number_of_events_going is less than length of events then
+                            number_of_events_going = number_of_events_going + 1
+                        Endwhile
+
+                        Print("Transaction ID: ", transaction_id, ", Username: ", payment_username, ", Total: ", payment_total, ", Date of payment: ", payment_date, ", Going for ", number_of_events_going, "events")
+                        Print("Event details: ")
+
+                        For event in events
+                            Open events_file in READ mode
+                                Read lines of file into efilehandler
+                                For eline in efilehandler
+                                    If first char of eline is equal to event then
+                                        Split eline into event_details using " " as delimiter
+                                        event_name = event_details[2]
+                                        Print("Event no.", event, "→ Name: ", event_name with "_" replaced as " ")
+                                    Endif
+                                Endfor
+                            Close efilehandler
+                        Endfor
+                    Endfor
+                Close pfilehandler
+
+                Print("Type 'e' to exit when ready: ")
+                Get Choice
+                If lowercase of choice is not 'e' then
+                    Print("Invalid input!")
+                    Return display_customer_payment()
+                Else
+                    Return admin(username)
+                Endif
 
             Function search_customer_registration()
                 Declare search_username, choice as string
