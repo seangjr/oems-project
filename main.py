@@ -446,9 +446,10 @@ def customer(username):
         clear_screen()
         print("1. Event categories")
         print("2. Event details")
+       # selection = int(input("Choose the events to checkout: "))
 
         selection_choice = int(input("Select an option to view details: "))
-        if selection_choice == 1:
+        if selection_choice == 2:
             # description of categories
             for item in description:
                 print(f"{description.index(item) + 1}. {item}")
