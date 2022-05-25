@@ -618,6 +618,7 @@ def customer(username):
             # transaction date
             transaction_date = time.strftime("%d/%m/%Y")
 
+            # file to write to payments file
             file_to_write = str(transaction_id) + " " + username + " " + str(total) + " " + str(
                 cart).strip("[]").replace("'", "").replace(",", "").replace(" ", "_") + " " + transaction_date + "\n"
 
