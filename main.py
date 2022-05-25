@@ -580,6 +580,7 @@ def customer(username):
             cart.remove(remove_item_prompt)
             with open(events_file, 'r') as file:
                 for line in file:
+                    # split event details by space
                     event_details = line.split()
                     event_index = event_details[0]
                     # remove corresponding price of event from price list
