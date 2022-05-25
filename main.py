@@ -630,7 +630,12 @@ def customer(username):
             print(
                 f"Your transaction ID: {transaction_id}\nPlease copy this number and save it for future reference.")
             input("Enter any character to exit: ")
-            return
+
+            # clear cart for next instance
+            cart.clear()
+            price_list.clear()
+            # return back to customer menu
+            return customer(username)
 
         elif modify_cart_prompt.lower() == 'e':
             return customer(username)
