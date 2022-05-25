@@ -65,8 +65,8 @@ def display_categories():
 
 def event_list():
     display_categories()
-    category = event_prompt(int(input("Event Category: ")))
     found = False
+    category = event_prompt(int(input("Event Category: ")))
     with open(events_file, 'r') as file:
         for line in file:
             # if category matches, print event
