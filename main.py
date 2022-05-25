@@ -5,11 +5,23 @@ import time
 working_path = os.getcwd()
 users_file = working_path + "/data/users.txt"
 events_file = working_path + "/data/events.txt"
+payments_file = working_path + "/data/payments.txt"
 
 # categories for events
 categories = ['Weddings', 'Concerts',
               'Talent_Shows', 'Seminars', 'Brand_Activation']
 
+# descriptions for events
+description = ['Wedding planning inclusive of emcee and flower bouquet.',
+               'Concert ticketing planning with small pantry and welcoming drinks.',
+               'Talent shows planning with judges and trophy.',
+               'Seminars planning with motivational speaker and lecturer.',
+               'Brand Activation campaign with red lion and ribbon cutting cerermony.']
+
+# initialise list for cart
+cart = []
+# list for price of events in cart -> to be calculated for total price
+price_list = []
 
 # descriptions for events
 description = ['Wedding planning inclusive of emcee and flower bouquet.',
@@ -223,6 +235,7 @@ def admin(username: str):
             return admin(username)
 
     def customer_details():
+
         def display_customer_registration():
             clear_screen()
             # display customer registration details
@@ -244,6 +257,45 @@ def admin(username: str):
                 print("Invalid input!")
                 time.sleep(2)
                 return display_customer_registration()
+            else:
+                return admin(username)
+
+        def display_customer_payment():
+            clear_screen()
+            # intialise number of events being paid for by user
+            number_of_events_going = 0
+            # display customer payment details
+            with open(payments_file, 'r') as pfile:
+                for pline in pfile:
+                    # split line by space
+                    payment_details = pline.split()
+                    transaction_id = payment_details[0]
+                    payment_username = payment_details[1]
+                    payment_total = payment_details[2]
+                    payment_date = payment_details[4]
+
+                    events = payment_details[3].replace("_", " ").split()
+                    while number_of_events_going < len(events):
+                        number_of_events_going += 1
+
+                    print(
+                        f"Transaction ID: {transaction_id}, Username: {payment_username}, Total: {payment_total}, Date of payment: {payment_date}, Going for {number_of_events_going} events\nEvent details:")
+
+                    for event in events:
+                        with open(events_file, 'r') as efile:
+                            for eline in efile:
+                                if eline[:1] == event:
+                                    event_details = eline.split()
+                                    event_name = event_details[2]
+                                    print(
+                                        f"Event no. {event} → Name: {event_name.replace('_', ' ')}")
+
+            # exit when 'e' is entered
+            choice = input("Type 'e' to exit when ready: ")
+            if choice.lower() != "e":
+                print("Invalid input!")
+                time.sleep(2)
+                return display_customer_payment()
             else:
                 return admin(username)
 
@@ -277,6 +329,48 @@ def admin(username: str):
             else:
                 admin(username)
 
+        def search_customer_payment():
+            clear_screen()
+            print("Search customer payment.")
+            # not found variable used to check if there is a user found
+            payment_found = False
+
+            # initalise number of events going
+            number_of_events_going = 0
+            # search customer payment based on search query and returns result if name contains search query or transaction id contains search query
+            search_query = str(
+                input("Search query (input username or transaction ID): "))
+
+            with open(payments_file, 'r') as file:
+                print(f"Searching for '{search_query}'...")
+
+                for line in file:
+                    # split line by spacing
+                    payment_details = line.split()
+                    transaction_id = payment_details[0]
+                    payment_username = payment_details[1]
+                    payment_total = payment_details[2]
+                    payment_date = payment_details[4]
+
+                    events = payment_details[3].replace("_", " ").split()
+                    while number_of_events_going < len(events):
+                        number_of_events_going += 1
+
+                    if payment_username.startswith(search_query) or transaction_id.startswith(search_query):
+                        payment_found = True
+                        print(
+                            f"Transaction ID: {transaction_id}, Username: {payment_username}, Total: {payment_total}, Date of payment: {payment_date}\nEvent details:")
+                        for event in events:
+                            with open(events_file, 'r') as efile:
+                                for eline in efile:
+                                    if eline[:1] == event:
+                                        event_details = eline.split()
+                                        event_name = event_details[2]
+                                        print(
+                                            f"Event no. {event} → Name: {event_name.replace('_', ' ')}")
+            if payment_found == False:
+                print("NO results from search query.")
+
         # customer details menu
         clear_screen()
         print("Customer details! Select an option below: \n1. Display all customer registration\n2. Display customer payment\n3. Search customer registration\n4. Search customer payment\n5. Back")
@@ -284,11 +378,11 @@ def admin(username: str):
         if choice == 1:
             display_customer_registration()
         elif choice == 2:
-            print("2")
+            display_customer_payment()
         elif choice == 3:
             search_customer_registration()
         elif choice == 4:
-            print("4")
+            search_customer_payment()
         elif choice == 5:
             admin(username)
 
@@ -319,8 +413,7 @@ def admin(username: str):
         print("Error! Invalid value. Try again!")
         time.sleep(1)
         clear_screen()
-        admin(username)
-    return admin(username)
+        return admin(username)
 
 
 def view_events():
@@ -341,6 +434,7 @@ def view_events():
 
 
 def customer(username):
+
     clear_screen()
     print(f"Welcome {username}! Select options below: ")
     print("1. View event details.")
@@ -349,17 +443,16 @@ def customer(username):
     print("4. Exit.")
 
     def selection():
+        clear_screen()
         print("1. Event categories")
         print("2. Event details")
 
         selection_choice = int(input("Select an option to view details: "))
         if selection_choice == 1:
             # description of categories
-            print("Weddings - ")
-            print("Concerts - ")
-            print("Talent Shows - ")
-            print("Seminars - ")
-            print("Brand Activation - ")
+            for item in description:
+                print(f"{description.index(item) + 1}. {item}")
+            return customer(username)
         elif selection_choice == 2:
             # details of events
             # if event not found in category, display message
@@ -372,32 +465,192 @@ def customer(username):
                 time.sleep(2)
                 return selection()
             else:
+                time.sleep(2)
+                return customer(username)
+    # allow cart to accept multiple events
+
+    def cart_function():
+        # this list will check for the input if it is a valid event number to add to cart
+        valid_events_list = []
+
+        with open(events_file, 'r') as file:
+            for line in file:
+                # if category matches, print event
+                # split line by space
+                event_details = line.split()
+                event_index = event_details[0]
+                event_category = event_details[1]
+                event_name = event_details[2]
+                event_date = event_details[3]
+                event_time = event_details[4]
+                event_venue = event_details[5]
+                event_price = event_details[6]
+                event_capacity = event_details[7]
+
+                print(f"Event no. {event_index} → Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price: {event_price}, Capacity: {event_capacity}")
+
+                valid_events_list.append(event_index)
+
+        # add event to cart
+        exited = False
+        while exited == False:
+            # prompt user to enter which event to add to cart
+            cart_prompt = input(
+                "Enter event number to add to cart or type 'e' to exit: ")
+
+            # check if input exists in the valid events list
+            if cart_prompt not in valid_events_list and cart_prompt.lower() != 'e':
+                print("Event does not exist!")
+                return cart_function()
+            elif cart_prompt.lower() == 'e':
+                exited = True
                 return customer(username)
 
-    def cart():
-        print("Cart")
+            # check if event is already in cart
+            if cart_prompt in cart:
+                print("Event already in cart!")
+                return cart_function()
+
+            cart.append(cart_prompt)
+
+            # add price of events in cart to price list
+            # checks for event in cart and index match
+            for event in cart:
+                # read for the price
+                with open(events_file, 'r') as file:
+                    for line in file:
+                        event_details = line.split()
+                        # read details from events.txt
+                        event_index = event_details[0]
+                        event_price = event_details[6]
+                        if event_index == event:
+                            price_list.append(event_price)
+
+        return customer(username)
 
     def checkout():
-        print("1. E-wallet")
-        print("2. Bank transfer")
-        payment = int(input("Please select checkout method: "))
+
+        clear_screen()
+
+        # print out events in cart with corresponding name
+        # read from events file
+        def events_in_cart():
+            for event in cart:
+                with open(events_file, 'r') as file:
+                    for line in file:
+                        event_details = line.split()
+                        event_index = event_details[0]
+                        event_name = event_details[2]
+                        if event_index == event:
+                            print(
+                                f"Event no. {event}, {event_name.replace('_', ' ')}")
+
+        # returns total price of events in cart
+        def total_price_cart():
+            total = 0
+            for price in price_list:
+                total += int(price)
+            return total
+
+        total = total_price_cart()
+
+        # calculate total price
+        print("Please review cart below!")
+        print("Events you are going for: ")
+        events_in_cart()
+        print(f"Total price: {total}RM")
+
+        # allow user to modify their cart or just checkout
+        modify_cart_prompt = input(
+            "Would you like to modify your cart? Type 'm' to modify cart , 'c' to checkout, or 'e' to exit: ")
+
+        if modify_cart_prompt.lower() == 'm':
+            print("Current events in cart: ")
+            events_in_cart()
+
+            remove_item_prompt = input(
+                "Enter event number to remove from cart: ")
+
+            # if item is not in cart, display message
+            if remove_item_prompt not in cart:
+                return
+
+            # remove item from cart
+            cart.remove(remove_item_prompt)
+            with open(events_file, 'r') as file:
+                for line in file:
+                    event_details = line.split()
+                    event_index = event_details[0]
+                    # remove corresponding price of event from price list
+                    if event_index == remove_item_prompt:
+                        price_list.remove(event_details[6])
+            # print new cart
+            print("New events in cart: ")
+            events_in_cart()
+            print(f"Total price: {total}RM")
+
+            time.sleep(2)
+
+            return customer(username)
+        elif modify_cart_prompt.lower() == 'c':
+            print(
+                "Checking out...\n\nAvailable payment methods: \n1. Credit/Debit Card Payment\n2. Bank Transfer")
+            checkout_prompt = int(input("Select payment method: "))
+            # credit card payment
+            if checkout_prompt == 1:
+                input("Enter name on card: ")
+                input("Enter card number: ")
+                input("Enter expiry date: ")
+                input("Enter CVV: ")
+                print("Payment successful!")
+            # bank transfer
+            elif checkout_prompt == 2:
+                input("Enter bank name: ")
+                input("Enter account number: ")
+                print("Payment successful!")
+            else:
+                print("Invalid input!")
+
+            # generates a unique number based on the UNIX timestamp
+            transaction_id = int(time.time())
+
+            # transaction date
+            transaction_date = time.strftime("%d/%m/%Y")
+
+            file_to_write = str(transaction_id) + " " + username + " " + str(total) + " " + str(
+                cart).strip("[]").replace("'", "").replace(",", "").replace(" ", "_") + " " + transaction_date + "\n"
+
+            with open(payments_file, 'a') as file:
+                # write transaction id, username, cart, total price
+                file.write(file_to_write)
+
+            # print out transaction ID for customer to save
+            print(
+                f"Your transaction ID: {transaction_id}\nPlease copy this number and save it for future reference.")
+            input("Enter any character to exit: ")
+            return
+
+        elif modify_cart_prompt.lower() == 'e':
+            return customer(username)
+        return customer(username)
 
     try:
         options = int(input("Choice: "))
         if options == 1:
             selection()
         elif options == 2:
-            cart()
+            cart_function()
         elif options == 3:
             checkout()
         elif options == 4:
-            print("Exiting...")
+            # clear cart for new user
+            cart.clear()
+            price_list.clear()
             clear_screen()
             return
     except ValueError:
         print("Invalid choice.")
         return customer(username)
-    return customer(username)
 
 
 def sign_up():

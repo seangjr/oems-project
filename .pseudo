@@ -1,14 +1,21 @@
 Program event_management_program
 Begin
     Import os module, time module
-    Declare working_path, users_file, events_file as string
-    Declare categories as array of string
+    Declare working_path, users_file, events_file, payments_file as string
+    Declare categories, description, cart, price_list as array of string
 
     working_path = get current working directory using os module
     users_file = working_path + "/data/users.txt"
     events_file = working_path + "/data/events.txt"
+    payments_file = working_path + "/data/payments.txt"
 
     categories = ['Weddings', 'Concerts', 'Talent_Shows', 'Seminars', 'Brand_Activation']
+
+    description = ['Wedding planning inclusive of emcee and flower bouquet.', 'Concert ticketing planning with small pantry and welcoming drinks.', 'Talent shows planning with judges and trophy.', 'Seminars planning with motivational speaker and lecturer.', 'Brand Activation campaign with red lion and ribbon cutting cerermony.']
+
+    cart = []
+
+    price_list = []
 
     Function clear_screen()
         Using os module:
