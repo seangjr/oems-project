@@ -4,7 +4,7 @@ Begin
     Declare working_path, users_file, events_file, payments_file as string
     Declare categories, description, cart, price_list as array of string
 
-    working_path = get current working directory using os module
+    working_path = Get current working directory using os module
     users_file = working_path + "/data/users.txt"
     events_file = working_path + "/data/events.txt"
     payments_file = working_path + "/data/payments.txt"
@@ -137,7 +137,7 @@ Begin
                 Write event_number, " ", event_category, " ", event_name, " ", event_date, " ", event_time, " ", event_venue, " ", event_price, " ", event_capacity, "\n" to filehandler
             Close filehandler
             Print("Event added.")
-            Return admin(username)
+            Return to admin(username)
         Endfunction
 
         Function modify_event()
@@ -221,12 +221,12 @@ Begin
                         Elseif choice is 8 then
                             line = ""
                         Elseif choice is 9 then
-                            Return admin(username)
+                            Return to admin(username)
                         Endif
 
                         If choice is not 1 to 9 then
                             Print("Invalid input. Try again!")
-                            Return admin(username)
+                            Return to admin(username)
                         Endif
 
                         For item in filedata
@@ -251,7 +251,7 @@ Begin
                         Close filehandler
 
                         Print("Event modified.")
-                        Return admin(username)
+                        Return to admin(username)
                     Endif
                 Endfor
             Endif
@@ -273,9 +273,9 @@ Begin
             If lowercase of choice is not 'e' then
                 Print("Invalid input!")
                 Delay for 2 seconds
-                Return display_event()
+                Return to display_event()
             Else
-                Return admin(username)
+                Return to admin(username)
             Endif
         Endfunction
 
@@ -303,9 +303,9 @@ Begin
                 Get Choice
                 If lowercase of choice is not 'e' then
                     Print("Invalid input!")
-                    Return display_customer_registration()
+                    Return to display_customer_registration()
                 Else
-                    Return admin(username)
+                    Return to admin(username)
                 Endif
             Endfunction
 
@@ -355,9 +355,9 @@ Begin
                 Get Choice
                 If lowercase of choice is not 'e' then
                     Print("Invalid input!")
-                    Return display_customer_payment()
+                    Return to display_customer_payment()
                 Else
-                    Return admin(username)
+                    Return to admin(username)
                 Endif
 
             Function search_customer_registration()
@@ -385,9 +385,9 @@ Begin
                 Get Choice
                 If lowercase of choice is not 'e' then
                     Print("Invalid input!")
-                    Return search_customer_registration()
+                    Return to search_customer_registration()
                 Else
-                    Return admin(username)
+                    Return to admin(username)
                 Endif
             Endfunction
 
@@ -449,9 +449,9 @@ Begin
                 Get Choice
                 If lowercase of choice is not 'e' then
                     Print("Invalid input!")
-                    Return search_customer_payment()
+                    Return to search_customer_payment()
                 Else
-                    Return admin(username)
+                    Return to admin(username)
             Endfunction
 
             Call function clear_screen()
@@ -473,7 +473,7 @@ Begin
             Elseif choice is 4 then
                 Call function search_customer_payment()
             Elseif choice is 5 then
-                Return admin(username)
+                Return to admin(username)
             Endif
         Endfunction
     
@@ -497,11 +497,11 @@ Begin
             Call function customer_details()
         Elseif choice is 5 then
             Print("Logging out...")
-            Call clear_screen()
-            Return
+            Call function clear_screen()
+            Return to main()
         Else
             Print("Error! Invalid input. Try again!")
-            Return admin(username)
+            Return to admin(username)
         Endif
     Endfunction
 
@@ -518,13 +518,13 @@ Begin
         Get choice
         If choice is not 1 and is not 2 then
             Print("Invalid input!")
-            return
+            Return to main()
         If choice is 2 then
-            return
+            Return to main()
         Endif
         Call function clear_screen()
         event_found = event_list()
-        if event_found is false then
+        If event_found is false then
             Print("No events found!")
         Endif
     Endfunction
@@ -549,7 +549,7 @@ Begin
             If selection_choice = 1 then 
                 For item in description:
                     Print(Index of item + 1, ". ", item)
-                    Return customer()
+                    Return to customer()
                 Endfor
             Elseif selection_choice = 2 then
                 event_found = event_list()
@@ -559,9 +559,9 @@ Begin
             Get choice
                 If lowercase of choice is not "e" then
                     Print("Invalid input")
-                    Return selection()
+                    Return to selection()
                 Else 
-                    Return customer(username)
+                    Return to customer(username)
                 Endif
         Endfunction
 
