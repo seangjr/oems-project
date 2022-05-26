@@ -22,22 +22,24 @@ Begin
             Clear screen
     Endfunction
 
-    Function event_prompt(choice: any)
-        If choice is not integer return choice as String replacing '_' with ' '
+    Function event_prompt(choice)
+        Declare parameter choice as any type
+        If choice is not integer return choice as String replacing ' ' with '_'
 
         If choice is 1:
-            return categories[0]
+            Return categories[0]
         Elseif choice is 2:
-            return categories[1]
+            Return categories[1]
         Elseif choice is 3:
-            return categories[2]
+            Return categories[2]
         Elseif choice is 4:
-            return categories[3]
+            Return categories[3]
         Elseif choice is 5:
-            return categories[4]
+            Return categories[4]
     Endfunction
 
     Function display_categories()
+        Declare element as string
         Print("Event Categories: ")
         For element in categories
             Print(Index of element + 1, ": ", element replaced '_' with ' ')
@@ -54,7 +56,8 @@ Begin
         Call function display_categories()
 
         Print("Event Category: ")
-        event_prompt(Get category)
+        Get category
+        event_prompt(category)
 
         Open events_file in READ mode
             Read lines of file into filehandler
@@ -75,7 +78,7 @@ Begin
                     )
             Endfor
         Close filehandler
-        return found
+        Return found
     Endfunction
 
     Function count_line(file)
@@ -107,12 +110,15 @@ Begin
             event_number = count_line(events_file)
 
             Print("Event Category: ")
-            event_prompt(Get category)
+            Get category
+            event_prompt(category)
 
             Print("Event Name: ")
-            event_prompt(Get event_name)
+            Get event_name
+            event_prompt(event_name)
 
             Print("Event Date: ")
+            Get event_date
             event_prompt(Get event_date)
 
             Print("Event Time: ")
