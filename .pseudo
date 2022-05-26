@@ -133,7 +133,7 @@ Begin
             Print("Event Capacity: ")
             event_prompt(Get event_capacity)
 
-            Open events_file in APPEND mode
+            Open events_file in APPEND mode as filehandler
                 Write event_number, " ", event_category, " ", event_name, " ", event_date, " ", event_time, " ", event_venue, " ", event_price, " ", event_capacity, "\n" to filehandler
             Close filehandler
             Print("Event added.")
@@ -192,25 +192,32 @@ Begin
                         If choice is 1 then
                             Call function display_categories()
                             Print("Event Category: ")
-                            event_category = event_prompt(Get new_category)
+                            Get new_category
+                            event_category = event_prompt(new_category)
                         Elsef choice is 2 then
                             Print("Event Name: ")
-                            event_name = event_prompt(Get new_name)
+                            Get new_name
+                            event_name = event_prompt(new_name)
                         Elseif choice is 3 then
                             Print("Event Date: ")
-                            event_date = event_prompt(Get new_date)
+                            Get new_date
+                            event_date = event_prompt(new_date)
                         Elseif choice is 4 then
                             Print("Event Time: ")
-                            event_time = event_prompt(Get new_time)
+                            Get new_time
+                            event_time = event_prompt(new_time)
                         Elseif choice is 5 then
                             Print("Event Venue: ")
-                            event_venue = event_prompt(Get new_venue)
+                            Get new_venue
+                            event_venue = event_prompt(new_venue)
                         Elseif choice is 6 then
                             Print("Event Price: ")
-                            event_price = event_prompt(Get new_price)
+                            Get new_price
+                            event_price = event_prompt(new_price)
                         Elseif choice is 7 then
                             Print("Event Capacity: ")
-                            event_capacity = event_prompt(Get new_capacity)
+                            Get new_capacity
+                            event_capacity = event_prompt(new_capacity)
                         Elseif choice is 8 then
                             line = ""
                         Elseif choice is 9 then
@@ -378,7 +385,7 @@ Begin
                 Get Choice
                 If lowercase of choice is not 'e' then
                     Print("Invalid input!")
-                    return search_customer_registration()
+                    Return search_customer_registration()
                 Else
                     Return admin(username)
                 Endif
@@ -491,12 +498,11 @@ Begin
         Elseif choice is 5 then
             Print("Logging out...")
             Call clear_screen()
-            return
+            Return
         Else
             Print("Error! Invalid input. Try again!")
-            return admin(username)
+            Return admin(username)
         Endif
-            Call function main()
     Endfunction
 
     Function view_events()
@@ -531,7 +537,7 @@ Begin
         print("2. Add events to cart.")
         print("3. Checkout.")
         print("4. Exit.")
-        Function selection()!!!!!!
+        Function selection()
             Declare selection_choice as integer
             Declare choice as string
             Call function clear_screen()
@@ -542,20 +548,20 @@ Begin
             Get selection_choice
             If selection_choice = 1 then 
                 For item in description:
-                    Print(f"{description.index(item) + 1}. {item}")
-                    return customer()
+                    Print(Index of item + 1, ". ", item)
+                    Return customer()
                 Endfor
             Elseif selection_choice = 2 then
                 event_found = event_list()
-                Print("No event found in this category!") if not event is found print ""
+                Print("No event found in this category!") If event is not found Else Do nothing
             Endif
             Print("Type 'e' to exit when done: ")
             Get choice
                 If lowercase of choice is not "e" then
                     Print("Invalid input")
-                    return selection()
+                    Return selection()
                 Else 
-                    return customer(username)
+                    Return customer(username)
                 Endif
         Endfunction
 
