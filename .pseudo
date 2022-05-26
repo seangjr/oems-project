@@ -143,7 +143,7 @@ Begin
         Function modify_event()
             Declare event_to_modify, choice as integer
             Declare filedata, modified_filedata as array of string
-            Declare temp_line, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity, new_category, new_name, new_date, new_time, new_venue, new_price, new_capacity as string
+            Declare temp_line, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity, new_category, new_name, new_date, new_time, new_venue, new_price, new_capacity, string, item as string
             Declare event_found as boolean
 
             Call function clear_screen()
@@ -229,16 +229,14 @@ Begin
                             Return to admin(username)
                         Endif
 
+                        modified_filedata = []
+
                         For item in filedata
                             If item is temp_line then
                                 item = item with temp_line replaced as line
-                            Endif
-                        Endfor
-
-                        modified_filedata = []
-                        For strings in filedata
-                            If strings is not empty then
-                                Append strings to modified_filedata
+                                If item is not empty then
+                                    Append item to modified_filedata
+                                Endif
                             Endif
                         Endfor
 
@@ -246,7 +244,7 @@ Begin
                             item = item with first char replaced as index of item + 1
                         Endfor
 
-                        Open events_file in WRITE mode
+                        Open events_file in WRITE mode as filehandler
                             Write lines of modified_filedata to filehandler
                         Close filehandler
 
