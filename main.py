@@ -23,12 +23,6 @@ cart = []
 # list for price of events in cart -> to be calculated for total price
 price_list = []
 
-# descriptions for events
-description = ['Wedding planning inclusive of emcee and flower bouquet.',
-               'Concert ticketing planning with small pantry and welcoming drinks.',
-               'Talent shows planning with judges and trophy.',
-               'Seminars planning with motivational speaker and lecturer.',
-               'Brand Activation campaign with red lion and ribbon cutting cerermony.']
 
 # clear screen function
 
