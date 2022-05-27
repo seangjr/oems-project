@@ -48,7 +48,7 @@ Begin
 
     Function event_list()
         Declare event_details as array of string
-        Declar category, event_index, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity as string
+        Declar category, event_index, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity, lines, line as string
         Declare found as bool
 
         found = False
@@ -83,6 +83,7 @@ Begin
 
     Function count_line(file)
         Declare parameter file as string
+        Declare lines, line as string
         Declare line_number as integer
         Open file in READ mode
             Read lines of file into filehandler
@@ -143,7 +144,7 @@ Begin
         Function modify_event()
             Declare event_to_modify, choice as integer
             Declare filedata, modified_filedata as array of string
-            Declare temp_line, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity, new_category, new_name, new_date, new_time, new_venue, new_price, new_capacity, string, item as string
+            Declare temp_line, event_category, event_name, event_date, event_time, event_venue, event_price, event_capacity, new_category, new_name, new_date, new_time, new_venue, new_price, new_capacity, string, item, line, lines as string
             Declare event_found as boolean
 
             Call function clear_screen()
@@ -282,7 +283,8 @@ Begin
             Declare choice as integer
 
             Function display_customer_registration()
-                Declare user, permission, registration_date, choice as string
+                Declare user, permission, registration_date, choice, line, lines as string
+                Declare user_details as array of string
 
                 Call function clear_screen()
                 Open users_file in READ mode
@@ -309,15 +311,15 @@ Begin
             Endfunction
 
             Function display_customer_payment
-                Declare payment_date, transaction_id, payment_username, payment_total, events, choice as string
+                Declare payment_date, transaction_id, payment_username, payment_total, events, choice, pline, eline, lines, event as string
                 Declare number_of_events_going as integer
-                Declare payment_details, event_details as array of string
+                Declare payment_details, event_details, events as array of string
 
                 number_of_events_going = 0
 
                 Call function clear_screen()
 
-                Open users_file in READ mode
+                Open payments_file in READ mode
                     Read lines of file into pfilehandler
                     For pline in pfilehandler
                         Split pline into payment_details using " " as delimiter
@@ -392,7 +394,7 @@ Begin
 
             Function search_customer_payment()
                 Declare payment_found as boolean
-                Declare search_query, choice as string
+                Declare search_query, choice, lines, pline, eline as string
                 Declare number_of_events_going as integer
                 Declare event_details, payment_details as array of string
                 Call function clear_screen()
