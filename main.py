@@ -443,7 +443,7 @@ def customer(username):
        # selection = int(input("Choose the events to checkout: "))
 
         selection_choice = int(input("Select an option to view details: "))
-        if selection_choice == 2:
+        if selection_choice == 1:
             # description of categories
             for item in description:
                 print(f"{description.index(item) + 1}. {item}")
