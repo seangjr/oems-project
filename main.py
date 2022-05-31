@@ -1,3 +1,9 @@
+# SEAN RELAMPAGOS
+# TP063366
+
+# ONG JING ZHE
+# TP0683883
+
 import os
 import time
 
