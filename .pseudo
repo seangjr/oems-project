@@ -538,6 +538,7 @@ Begin
         print("2. Add events to cart.")
         print("3. Checkout.")
         print("4. Exit.")
+
         Function selection()
             Declare selection_choice as integer
             Declare choice as string
@@ -550,30 +551,44 @@ Begin
             If selection_choice = 1 then 
                 For item in description:
                     Print(Index of item + 1, ". ", item)
-                    Return to customer()
                 Endfor
+                
             Elseif selection_choice = 2 then
                 event_found = event_list()
-                Print("No event found in this category!") If event is not found Else Do nothing
+                
+                If event is not found
+                    Print("No event found in this category!")
+                Endif
+            Else
+                Print("Invalid input!")
+                Delay for 1 second
+                Return to selection()
             Endif
+            
             Print("Type 'e' to exit when done: ")
             Get choice
-                If lowercase of choice is not "e" then
-                    Print("Invalid input")
-                    Return to selection()
-                Else 
-                    Return to customer(username)
-                Endif
+            If lowercase of choice is not "e" then
+                Print("Invalid input")
+                Return to selection()
+            Else 
+                Return to customer(username)
+            Endif
+
         Endfunction
 
         Function cart_function()
-        Declare cart_prompt as integer
+            Declare cart_prompt as integer
+            Declare exited as boolean
+            Declare valid_event_list, event_details as array of string
+            Declare event_name, event_date, event_time, event_venue, event_price, event_capacity, event_id, line, lines as string
+
+
             valid_event_list = []
             
-            Open users_file in READ mode
-                Read lines of file into pfilehandler
-                For pline in pfilehandler
-                    event_details = line.split()
+            Open events_file in READ mode
+                Read lines of file into filehandler
+                For line in filehandler
+                    Split line into event_details using " " as delimiter
                     event_index = event_details[0]
                     event_category = event_details[1]
                     event_name = event_details[2]
@@ -584,57 +599,66 @@ Begin
                     event_capacity = event_details[7]
 
                     Print(f"Event no. ,event_index, Category: ,event_category, , Name:, event_name, Date: ,event_date,, Time: ,event_time,, Venue: ,event_venue.replace,, Price: ,event_price,, Capacity: ,event_capacity,")
-                    valid_event_list.append(event_index)
+                    Append event_index to valid_event_list
+                Endfor
             Close filehandler
-            exited == False
-            While exited == False then
+
+            exited = False
+            While exited is False then
                 Print ("Enter event number to add to cart or type 'e' to exit: ")
                 Get cart_prompt
 
-                If cart_prompt is not same as valid_event_list && cart_prompt is not "e" then
+                If cart_prompt is not in valid_event_list and cart_prompt is not "e" then
                     Print ("Event does not exist! ")
-                    return cart_function()
-                Elseif cart_prompt = "e" then
+                    Return to cart_function()
+                Elseif cart_prompt is "e" then
                     exited = True 
-                    return customer(username)
+                    Return to customer(username)
                 Endif
+
                 If cart_prompt in cart then
                     Print ("Event is already in cart! ")
-                    return cart_function()
-
-                cart.append(cart_prompt)
+                    Return to cart_function()
                 Endif
 
-                for event in cart 
-                    Open users_file in READ mode
-                        Read lines of file into pfilehandler
-                        For pline in pfilehandler
-                        event_details = line.split()
+                Append cart_prompt to cart
+            Endwhile
+
+            For event in cart 
+                Open events_file in READ mode
+                    Read lines of file into filehandler
+                    For line in filehandler
+                        Split line into event_details using " " as delimiter
                         event_index = event_details[0]
-                            event_price = event_details[6]
-                            If event_index = event then
-                                price_list.append(event_price)
-                            Endif
-                        Endfor
-                    Close filehandler
-                Endfor
-            return customer(username)
+                        event_price = event_details[6]
+                        If event_index is event then
+                            Append event_price into price_list
+                        Endif
+                    Endfor
+                Close filehandler
+            Endfor
+            Return to customer(username)
         Endfunction
 
         Function checkout()
+            Declare modify_cart_prompt, remove_item_prompt, checkout_prompt, file_to_write, line, lines, transaction_date, input as string
+            Declare transaction_id as integer
+
             Call function clear_screen()
+
             Function events_in_cart()
-            Declare event, event_name as string
-                for events in cart 
-                    Open users_file in READ mode
-                        Read lines of file into pfilehandler
-                        For pline in pfilehandler
-                            event_details = line.split()
+                Declare event, line, event_index, event_name as string
+                Declare event_details as array of string
+
+                For event in cart 
+                    Open events_file in READ mode
+                        Read lines of file into filehandler
+                        For line in filehandler
+                            Split line into event_details using " " as delimiter
                             event_index = event_details[0]
                             event_name = event_details[2]
-                            Close filehandler
-                            If event_index = event then 
-                            Print("Event no., event, &&, event_name,")
+                            If event_index is event then 
+                                Print("Event no., event, event_name with '_' replaced as ' '")
                             Endif
                         Endfor
                     Close filehandler
@@ -642,88 +666,103 @@ Begin
             Endfunction
                     
             Function total_price_cart()
-            Declare total, checkout_prompt as integer 
-            Declare modify_cart_prompt,remove_item_prompt, transaction_id as string
+                Declare total as integer
                 total = 0
-                for price in price_list
+                For price in price_list
                     total += int(price)
-                return total
                 Endfor
+                Return total
+            Endfunction
 
             total = total_price_cart()
 
             Print("Please review cart below!")
             Print("Events you are going for: ")
             Call function events_in_cart()
-            Print("Total price: ,total,RM")
+            Print("Total price:", total, "RM")
 
             Print("Would you like to modify your cart? Type 'm' to modify cart , 'c' to checkout, or 'e' to exit: ")
             Get modify_cart_prompt
-            If lowercase of modify_cart_prompt is not 'm' then
+
+            If lowercase of modify_cart_prompt is 'm' then
                 Print("Current events in cart: ")
                 Call function events_in_cart()
 
                 Print("Enter event number to remove from cart: ")
                 Get remove_item_prompt
-                If remove_item_promt is not in cart then 
-                    return
+
+                If remove_item_prompt is not in cart then 
+                    Print("Event not in cart!")
+                    Return to customer(username) function
                 Endif
 
-                    cart.remove(remove_item_prompt)
-                    Open users_file in READ mode
-                        Read lines of file into pfilehandler
-                        For pline in pfilehandler
-                            event_details = line.split()
-                            event_index = event_details[0]
-                            If event_index == remove_item_prompt then
-                                price_list.remove(event_details[6])
-                            Endif
-                        Endfor
-                    Close filehandler
-                    Print("New events in cart: ")
-                    Call function events_in_cart()
-                    Print("Total price: ,total, RM")
-                    return customer(username)
+                Remove remove_item_prompt from cart
 
-            Elseif lowercase of modify_cart_prompt is not 'c' then
+                Open users_file in READ mode
+                    Read lines of file into filehandler
+                    For line in filehandler
+                        Split line into user_details using " " as delimiter
+                        event_index = event_details[0]
+                        If event_index is remove_item_prompt then
+                            Remove remove_item_prompt from price_list
+                        Endif
+                    Endfor
+                Close filehandler
+
+                Print("New events in cart: ")
+                Call function events_in_cart()
+                Print("Total price: ", total, "RM")
+                Delay for 2 seconds
+                Return to customer(username) function
+
+            Elseif lowercase of modify_cart_prompt is 'c' the
+
                 Print("Checking out...\n\nAvailable payment methods: \n1. Credit/Debit Card Payment\n2. Bank Transfer")
                 Print("Select payment method: ")
                 Get checkout_prompt
-                If checkout_prompt == 1 then  
-                    input("Enter name on card: ")
-                    input("Enter card number: ")
-                    input("Enter expiry date: ")
-                    input("Enter CVV: ")
+                If checkout_prompt is 1 then
+                    Print("Enter name on card: ")
+                    Get input
+                    Print("Enter card number: ")
+                    Get input
+                    Print("Enter expiry date: ")
+                    Get input
+                    Print("Enter CVV: ")
+                    Get input
                     print("Payment successful!")
-                Elseif checkout_prompt == 2 then
-                    input("Enter bank name: ")
-                    input("Enter account number: ")
-                    print("Payment successful!")
+                Elseif checkout_prompt is 2 then
+                    Print("Enter bank name: ")
+                    Get input
+                    Print("Enter account number: ")
+                    Get input
+                    Print("Payment successful!")
                 Else 
-                    print("Invalid input! ")
+                    Print("Invalid input! ")
+                    Return to checkout()
                 Endif
                     
-                transaction_id = int(time.time())
+                transaction_id = Get current UNIX timestamp using time module
 
-                transaction_date = time.strftime("%d/%m/%Y")
+                transaction_date = Date today using time module
 
-                file_to_write = transaction_id + username + total + cart + transaction_date
+                file_to_write = transaction_id + username + total + cart with outer brackets stripped, commas and apostrophes deleted + transaction_date
 
-                Open users_file in APPEND mode
-                    Write file_to_write
+                Open payments_file in APPEND mode
+                    Write file_to_write to filehandler
                 Close filehandler 
 
                 Print("Your transaction ID: ,transaction_id,\nPlease copy this number and save it for future reference.")
-                input("Enter any character to exit: ")
+                Print("Enter any character to exit: ")
+                Get input
                     
-                cart.clear()
-                price_list.clear()
-                return customer(username)
+                Remove items in cart
+                Remove items in price_list
+                Return to customer(username)
                 
             Elseif lowercase of modify_cart_prompt is 'e' then
-                return customer(username)
+                Return to customer(username)
             Endif
-            return customer(username)
+            Return to customer(username)
             Endfunction
         Endfunction
 
@@ -736,18 +775,15 @@ Begin
         Elseif options == 3 then 
             Call function checkout()
         Elseif options == 4 then 
-            cart.clear()
-            price_list.clear()
+            Remove items in price_list
             Call function clear_screen()
-            return
+            Return to main() function
         Else    
-            print("Invalid choice. ")
+            Print("Invalid choice. ")
             Call function clear_screen()
-            return customer(username)
+            Return to customer(username)
         Endif
     Endfunction
-
-                
 
 
     Function sign_up()

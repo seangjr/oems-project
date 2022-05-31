@@ -443,25 +443,27 @@ def customer(username):
        # selection = int(input("Choose the events to checkout: "))
 
         selection_choice = int(input("Select an option to view details: "))
-        if selection_choice == 2:
+        if selection_choice == 1:
             # description of categories
             for item in description:
                 print(f"{description.index(item) + 1}. {item}")
-            return customer(username)
         elif selection_choice == 2:
             # details of events
             # if event not found in category, display message
             event_found = event_list()
             print("No event found in this category!") if not event_found else ""
-
-            choice = input("Type 'e' to exit when done: ")
-            if choice.lower() != "e":
-                print("Invalid input!")
-                time.sleep(2)
-                return selection()
-            else:
-                time.sleep(2)
-                return customer(username)
+        else:
+            print("Invalid input!")
+            time.sleep(1)
+            return selection()
+        choice = input("Type 'e' to exit when done: ")
+        if choice.lower() != "e":
+            print("Invalid input!")
+            time.sleep(2)
+            return selection()
+        else:
+            time.sleep(2)
+            return customer(username)
     # allow cart to accept multiple events
 
     def cart_function():
@@ -568,6 +570,7 @@ def customer(username):
 
             # if item is not in cart, display message
             if remove_item_prompt not in cart:
+                print("Event not in cart!")
                 return
 
             # remove item from cart
@@ -588,6 +591,7 @@ def customer(username):
             time.sleep(2)
 
             return customer(username)
+
         elif modify_cart_prompt.lower() == 'c':
             print(
                 "Checking out...\n\nAvailable payment methods: \n1. Credit/Debit Card Payment\n2. Bank Transfer")
@@ -606,6 +610,7 @@ def customer(username):
                 print("Payment successful!")
             else:
                 print("Invalid input!")
+                return checkout()
 
             # generates a unique number based on the UNIX timestamp
             transaction_id = int(time.time())
@@ -634,7 +639,10 @@ def customer(username):
 
         elif modify_cart_prompt.lower() == 'e':
             return customer(username)
-        return customer(username)
+        else:
+            print("Invalid input!")
+            time.sleep(1)
+            return checkout()
 
     try:
         options = int(input("Choice: "))
