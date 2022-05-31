@@ -155,14 +155,16 @@ Begin
                 Read lines of file into filehandler
                 Split filehandler into filedata using '\n' as delimiter
             Close filehandler
+            
+            If event_found is True then
+                Print("Modify event. Please enter the event number to modify: ")
+                Print("Event number: )
+                Get event_to_modify
+            Endif
 
             For line in filedata:
                 temp_line = line
                 If event_found is True then
-                    Print("Modify event. Please enter the event number to modify: ")
-                    Print("Event number: )
-                    Get event_to_modify
-
                     If first char of line is event_to_modify then
                         Split line into event_details using " " as delimiter
                         event_index = event_details[0]
@@ -255,6 +257,7 @@ Begin
                 Endfor
             Endif
             Print("No event found!")
+            Return to admin(username)
         Endfunction
 
         Function display_event()
@@ -363,10 +366,12 @@ Begin
 
             Function search_customer_registration()
                 Declare search_username, choice, user, permission, registration_date as string
+                Declare registration_found as boolean
                 Declare user_details as array of string
 
                 Call function clear_screen()
                 Print("Search customer registration.")
+                registration_found = False
                 Print("Search username: ")
                 Get search_username
                 Open users_file in READ mode
@@ -378,10 +383,15 @@ Begin
                         permission = user_details[2]
                         registration_date = user_details[3]
                         If user starts with search_username and permission is not 'True' then
+                            registration_foind = True
                             Print("User: ", user, "Registration date: ", registration_date)
                         Endif
                     Endfor
                 Close filehandler
+
+                If registration_found is False then
+                    Print("No results")
+                Endif
                 Print("Type 'e' to exit when ready: ")
                 Get Choice
                 If lowercase of choice is not 'e' then
@@ -612,7 +622,20 @@ Begin
                     Print ("Event does not exist! ")
                     Return to cart_function()
                 Elseif cart_prompt is "e" then
-                    exited = True 
+                    exited = True
+                    For event in cart 
+                        Open events_file in READ mode
+                            Read lines of file into filehandler
+                            For line in filehandler
+                                Split line into event_details using " " as delimiter
+                                event_index = event_details[0]
+                                event_price = event_details[6]
+                                If event_index is event then
+                                    Append event_price into price_list
+                                Endif
+                            Endfor
+                        Close filehandler
+                    Endfor
                     Return to customer(username)
                 Endif
 
@@ -624,19 +647,6 @@ Begin
                 Append cart_prompt to cart
             Endwhile
 
-            For event in cart 
-                Open events_file in READ mode
-                    Read lines of file into filehandler
-                    For line in filehandler
-                        Split line into event_details using " " as delimiter
-                        event_index = event_details[0]
-                        event_price = event_details[6]
-                        If event_index is event then
-                            Append event_price into price_list
-                        Endif
-                    Endfor
-                Close filehandler
-            Endfor
             Return to customer(username)
         Endfunction
 
@@ -857,6 +867,7 @@ Begin
         Close filehandler
 
         Print("Invalid username or password.")
+        Delay for 2 seconds
         Call function clear_screen()
         Return log_in()
     Endfunction
@@ -884,6 +895,7 @@ Begin
             Return to Program
         Else
             Print("Invalid choice.")
+            Delay for 2 seconds
             Call function clear_screen()
             Return to main()
         Endif
