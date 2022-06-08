@@ -77,9 +77,7 @@ def event_list():
             # display event details in category
             if event_category == category:
                 found = True
-                print(
-                    f"Event no. {event_index} → Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price (RM): {event_price}, Capacity: {event_capacity}"
-                )
+                print(f"Event no. {event_index} → Category: {event_category}, Name: {event_name.replace('_', ' ')}, Date: {event_date}, Time: {event_time}, Venue: {event_venue.replace('_', ' ')}, Price (RM): {event_price}, Capacity: {event_capacity}")
     return found
 
 
@@ -213,6 +211,7 @@ def admin(username: str):
                     print("Event modified...")
                     return admin(username)
         print("No event found!")
+        return admin(username)
 
     def display_event():
         clear_screen()
@@ -379,7 +378,9 @@ def admin(username: str):
             search_customer_payment()
         elif choice == 5:
             admin(username)
-
+        else:
+            print("Invalid input!")
+            return customer_details()
     # admin main menu
     clear_screen()
     print(f"Hi {username}! Welcome to the admin panel! Select options below: ")
@@ -403,6 +404,9 @@ def admin(username: str):
             print("Logging out...")
             clear_screen()
             return
+        else:
+            print("Invalid value!")
+            return admin(username)
     except ValueError:
         print("Error! Invalid value. Try again!")
         time.sleep(1)

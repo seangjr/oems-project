@@ -255,6 +255,7 @@ Begin
                 Endfor
             Endif
             Print("No event found!")
+            Return to admin(username)
         Endfunction
 
         Function display_event()
@@ -475,6 +476,9 @@ Begin
                 Call function search_customer_payment()
             Elseif choice is 5 then
                 Return to admin(username)
+            Else
+                Print("Invalid input!")
+                Return to customer()
             Endif
         Endfunction
     
