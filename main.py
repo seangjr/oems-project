@@ -1,3 +1,9 @@
+# SEAN RELAMPAGOS
+# TP063366
+
+# ONG JING ZHE
+# TP0683883
+
 import os
 import time
 
@@ -131,14 +137,16 @@ def admin(username: str):
             # read file line by line -> output to list var filedata
             filedata = file.readlines()
 
+        if event_found == True:
+            print("Modify event. Please enter the event number to modify: ")
+            event_to_modify = int(input("Event number: "))
+
         # loop through list and replace line
         for line in filedata:
             # store unmodified line in a variable, which will be used later
             temp_line = line
             # if event number matches, modify event
-            if event_found:
-                print("Modify event. Please enter the event number to modify: ")
-                event_to_modify = int(input("Event number: "))
+            if event_found == True:
 
                 if line[:1] == str(event_to_modify):
                     # split line by space
@@ -295,6 +303,7 @@ def admin(username: str):
         def search_customer_registration():
             clear_screen()
             print("Search customer registration.")
+            registration_found = False
             # search customer registration based on search query and returns result if username contains search query
             search_username = str(input("Search username: "))
             with open(users_file, 'r') as file:
@@ -310,9 +319,12 @@ def admin(username: str):
                     # display customer registration details
                     if permission != "True":
                         # if username contains search query
-                        print(f"Username: {user}\nRegistration Date: {registration_date}") if user.startswith(
-                            search_username) else print("No results.")
-
+                        if user.startswith(search_username):
+                            registration_found = True
+                            print(
+                                f"Username: {user}, Registration Date: {registration_date}")
+            if registration_found == False:
+                print("No results.")
             # exit when 'e' is entered
             choice = input("Type 'e' to exit when ready: ")
             if choice.lower() != "e":
@@ -363,6 +375,14 @@ def admin(username: str):
                                             f"Event no. {event} → Name: {event_name.replace('_', ' ')}")
             if payment_found == False:
                 print("NO results from search query.")
+             # exit when 'e' is entered
+            choice = input("Type 'e' to exit when ready: ")
+            if choice.lower() != "e":
+                print("Invalid input!")
+                time.sleep(2)
+                return search_customer_payment()
+            else:
+                admin(username)
 
         # customer details menu
         clear_screen()
@@ -447,25 +467,27 @@ def customer(username):
        # selection = int(input("Choose the events to checkout: "))
 
         selection_choice = int(input("Select an option to view details: "))
-        if selection_choice == 2:
+        if selection_choice == 1:
             # description of categories
             for item in description:
                 print(f"{description.index(item) + 1}. {item}")
-            return customer(username)
         elif selection_choice == 2:
             # details of events
             # if event not found in category, display message
             event_found = event_list()
             print("No event found in this category!") if not event_found else ""
-
-            choice = input("Type 'e' to exit when done: ")
-            if choice.lower() != "e":
-                print("Invalid input!")
-                time.sleep(2)
-                return selection()
-            else:
-                time.sleep(2)
-                return customer(username)
+        else:
+            print("Invalid input!")
+            time.sleep(1)
+            return selection()
+        choice = input("Type 'e' to exit when done: ")
+        if choice.lower() != "e":
+            print("Invalid input!")
+            time.sleep(2)
+            return selection()
+        else:
+            time.sleep(2)
+            return customer(username)
     # allow cart to accept multiple events
 
     def cart_function():
@@ -503,6 +525,20 @@ def customer(username):
                 return cart_function()
             elif cart_prompt.lower() == 'e':
                 exited = True
+
+                # add price of events in cart to price list
+                # checks for event in cart and index match
+                for event in cart:
+                    # read for the price
+                    with open(events_file, 'r') as file:
+                        for line in file:
+                            event_details = line.split()
+                            # read details from events.txt
+                            event_index = event_details[0]
+                            event_price = event_details[6]
+                            if event_index == event:
+                                price_list.append(event_price)
+
                 return customer(username)
 
             # check if event is already in cart
@@ -511,19 +547,6 @@ def customer(username):
                 return cart_function()
 
             cart.append(cart_prompt)
-
-            # add price of events in cart to price list
-            # checks for event in cart and index match
-            for event in cart:
-                # read for the price
-                with open(events_file, 'r') as file:
-                    for line in file:
-                        event_details = line.split()
-                        # read details from events.txt
-                        event_index = event_details[0]
-                        event_price = event_details[6]
-                        if event_index == event:
-                            price_list.append(event_price)
 
         return customer(username)
 
@@ -572,6 +595,7 @@ def customer(username):
 
             # if item is not in cart, display message
             if remove_item_prompt not in cart:
+                print("Event not in cart!")
                 return
 
             # remove item from cart
@@ -587,11 +611,13 @@ def customer(username):
             # print new cart
             print("New events in cart: ")
             events_in_cart()
+            total = total_price_cart()
             print(f"Total price: {total}RM")
 
             time.sleep(2)
 
-            return customer(username)
+            return checkout()
+
         elif modify_cart_prompt.lower() == 'c':
             print(
                 "Checking out...\n\nAvailable payment methods: \n1. Credit/Debit Card Payment\n2. Bank Transfer")
@@ -610,6 +636,7 @@ def customer(username):
                 print("Payment successful!")
             else:
                 print("Invalid input!")
+                return checkout()
 
             # generates a unique number based on the UNIX timestamp
             transaction_id = int(time.time())
@@ -638,7 +665,10 @@ def customer(username):
 
         elif modify_cart_prompt.lower() == 'e':
             return customer(username)
-        return customer(username)
+        else:
+            print("Invalid input!")
+            time.sleep(1)
+            return checkout()
 
     try:
         options = int(input("Choice: "))
@@ -712,6 +742,7 @@ def log_in():
                 # call auth function
                 if user_details[2] == "True":
                     # if user is admin
+
                     admin(username)
                 else:
                     # else if user is customer call the customer function
@@ -719,6 +750,7 @@ def log_in():
                 return
 
     print("Invalid username or password.")
+    time.sleep(2)
     clear_screen()
     return main()
 
@@ -745,6 +777,7 @@ def main():
             exit()
     except ValueError:
         print("Invalid choice.")
+        time.sleep(2)
         clear_screen()
         return main()
     main()
